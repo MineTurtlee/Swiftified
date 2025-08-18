@@ -4,18 +4,23 @@
 //
 //  Created by GreenyCells (Mineturtlee) on 10/8/25.
 //
+// MTM5OTUwNDU4NDQzMDQ1Mjc4Ng.GkYZ5Q.2lhQIhYYoGuluoyJ8UEisg3SKP6JoFFZ8pKmmo
 
 import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationSplitView {
+            VStack {
+                List {
+                    NavigationLink("Main", destination: Main())
+                    NavigationLink("Settings", destination: Settings())
+                }
+            }
         }
-        .padding()
+        detail: {
+            Main()
+        }
     }
 }
 
