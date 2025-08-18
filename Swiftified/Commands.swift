@@ -13,11 +13,12 @@ struct Commands {
         func invokeCommand(command: String, client: DiscordClient, ctx: ChannelID, message: DiscordMessage) {
             let author = message.author
             if command == "help" {
-                client.sendMessage(DiscordMessage(embeds: [DiscordEmbed(title: "Help", description: "Sorry, but no help.")]), to: ctx)
+                client.sendMessage(DiscordMessage(embeds: [DiscordEmbed(title: "Help", description: "- `sw!help`\n-# Print this message\n- sw!echo <message>\n-# Makes the bot says smt :3")]), to: ctx)
             }
+            
             if command.starts(with:"echo") {
                 let message = command.replacingOccurrences(of: "echo ", with: "")
-                client.sendMessage(DiscordMessage(content: "Hello! You said \(message)\n-# replied to <@\(String(describing: author?.id))>"), to: ctx)
+                client.sendMessage(DiscordMessage(content: "Hello! You said \(message)\n-# replied to <@\(author?.id)>"), to: ctx)
             }
         }
     }
