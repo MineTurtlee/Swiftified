@@ -9,20 +9,20 @@ import Discord
 import Dispatch
 import SwiftUI
 
+
 class Bot: DiscordClientDelegate {
     
     // MARK: Initialize variables
     
+    static let shared = Bot()
     @AppStorage("token") public var token: String = ""
     @AppStorage("statusMode") private var selection: String = "Nothing"
     @AppStorage("statuss") private var status = "Online"
     @AppStorage("statusName") public var statusName: String = ""
     @AppStorage("prefix") public var prefix: String = "!"
     private var statusMode: DiscordActivityType? = nil
-    
+    public var cliente: DiscordClient!
     private var statuspid: DiscordPresenceStatus = .online
-    
-    // MARK: These won't work
     
     func updateStatus(from selection: String) {
         switch selection {
@@ -49,27 +49,25 @@ class Bot: DiscordClientDelegate {
         }
     }
     
-    // MARK: Things work from here
-    
-    private var client: DiscordClient!
-    
     func start() {
-        client = DiscordClient(
+        cliente = DiscordClient(
             token: "Bot \(token)",
             delegate: self,
             configuration: [
                 .intents([.allIntents])
             ]
         )
-        client.connect()
-        wow(client)
+        cliente.connect()
+        wow(cliente)
     }
     
     func sybau() {
-        client.disconnect()
+        cliente.disconnect()
     }
     
     func publishPresence() {
+        updateStatusMode(from: selection)
+        updateStatus(from: status)
         let newPresence = DiscordPresenceUpdate(
             activities: [
                 DiscordActivity(name: statusName, type: statusMode ?? .game),
@@ -78,9 +76,7 @@ class Bot: DiscordClientDelegate {
             status: statuspid,
             afkSince: nil
         )
-        client.setPresence(newPresence)
-        updateStatusMode(from: selection)
-        updateStatus(from: status)
+        cliente.setPresence(newPresence)
     }
    
     func wow(_ client: DiscordClient) {

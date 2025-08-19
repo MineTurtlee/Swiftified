@@ -13,7 +13,7 @@ import Logging
 struct Commands {
     @AppStorage("prefix") var prefix: String = ""
     class PrefixedCommands {
-        @ObservedObject var tmp = TempVars()
+        @ObservedObject var tmp = TempVars.shared
         @AppStorage("prefix") var prefix: String = ""
         init() {}
         func invokeCommand(command: String, client: DiscordClient, ctx: ChannelID, message: DiscordMessage) {

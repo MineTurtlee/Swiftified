@@ -7,13 +7,16 @@
 
 import SwiftUI
 
-class TempVars: ObservableObject {
+final class TempVars: ObservableObject {
+    static let shared = TempVars()
     @Published var hasStarted: Bool = false
+    private init() {}
 }
 
 struct Main: View {
     @StateObject private var manager = BotManager()
-    @StateObject private var tmp = TempVars()
+    private var bot = Bot.shared
+    @ObservedObject private var tmp = TempVars.shared
     @AppStorage("statusMode") public var selection = "Nothing"
     let statuses = ["Custom", "Streaming", "Listening", "Playing", "Watching", "Nothing"]
     @AppStorage("statusName") public var statusName: String = ""
@@ -54,25 +57,27 @@ struct Main: View {
                 }
                 HStack {
                     Text("Start, or stop the bot!")
-                    if tmp.hasStarted == false {
-                        Button(action: {
-                            tmp.hasStarted = true
-                            manager.startBot()
-                        }, label: {Text("Start")})
-                        .frame(alignment: .trailing)
-                    }
-                    else {
-                        Button(action: {
-                            tmp.hasStarted = false
-                            manager.stopBot()
-                        }, label: {Text("Stop")})
-                        .frame(alignment: .trailing)
+                    Button(action: {
+                        tmp.hasStarted.toggle()
+                        manager.startBot()
+                    }) {
+                        Text(tmp.hasStarted ? "Stop" : "Start")
                     }
                 }
-                Button("Refresh Presence") {
-                    Bot().publishPresence()
-                      }
-                .frame(alignment: .trailing)
+                HStack {
+                    Text("Restart the bot (use when refreshing presence)")
+                    let btn = Button("Restart") {
+                        manager.stopBot()
+                        TempVars.shared.hasStarted.toggle()
+                        manager.startBot()
+                        TempVars.shared.hasStarted.toggle()
+                    }
+                    .frame(alignment: .trailing)
+                    if TempVars.shared.hasStarted == true {
+                        btn.disabled(true)
+                    }
+                    btn
+                }
             }
         }
         .environmentObject(tmp)
