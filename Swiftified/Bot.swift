@@ -57,7 +57,9 @@ class Bot: DiscordClientDelegate {
         client = DiscordClient(
             token: "Bot \(token)",
             delegate: self,
-            configuration: [.intents([.allIntents])]
+            configuration: [
+                .intents([.allIntents])
+            ]
         )
         client.connect()
         wow(client)
