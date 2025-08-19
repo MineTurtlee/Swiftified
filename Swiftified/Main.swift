@@ -16,7 +16,6 @@ struct Main: View {
     @StateObject private var tmp = TempVars()
     @AppStorage("statusMode") public var selection = "Nothing"
     let statuses = ["Custom", "Streaming", "Listening", "Playing", "Watching", "Nothing"]
-    @AppStorage("token") public var token: String = ""
     @AppStorage("statusName") public var statusName: String = ""
     @AppStorage("statuss") public var status = "Online"
     @AppStorage("prefix") public var prefix = "!"
@@ -25,11 +24,6 @@ struct Main: View {
         
         NavigationStack {
             List {
-                HStack {
-                    Text("Bot Token")
-                    TextField("Token here", text: $token)
-                        .textFieldStyle(.roundedBorder)
-                }
                 HStack {
                     Text("Prefix")
                     TextField("Prefix here", text: $prefix)

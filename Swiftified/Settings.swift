@@ -9,13 +9,16 @@ import SwiftUI
 
 struct Settings: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        @AppStorage("token") var token: String = ""
+        NavigationStack {
+            List {
+                HStack {
+                    Text("Bot Token")
+                    TextField("Token here", text: $token)
+                        .textFieldStyle(.roundedBorder)
+                }
+            }
         }
-        .padding()
     }
 }
 
