@@ -8,7 +8,9 @@
 import Discord
 import Dispatch
 import SwiftUI
+import Logging
 
+fileprivate let logger = Logger(label: "SwiftifiedBot")
 
 class Bot: DiscordClientDelegate {
     
@@ -20,9 +22,19 @@ class Bot: DiscordClientDelegate {
     @AppStorage("statuss") private var status = "Online"
     @AppStorage("statusName") public var statusName: String = ""
     @AppStorage("prefix") public var prefix: String = "!"
+    @AppStorage("tokenType") var tokenType: String = "Bot"
     private var statusMode: DiscordActivityType? = nil
     public var cliente: DiscordClient!
     private var statuspid: DiscordPresenceStatus = .online
+    var tokentype: String = ""
+    
+    func getTokenType(from selection: String) {
+        switch selection {
+        case "User": tokentype = ""
+        case "Bot": tokentype = "Bot "
+        default: tokentype = "Bot "
+        }
+    }
     
     func updateStatus(from selection: String) {
         switch selection {
@@ -50,8 +62,9 @@ class Bot: DiscordClientDelegate {
     }
     
     func start() {
+        getTokenType(from: tokenType)
         cliente = DiscordClient(
-            token: "Bot \(token)",
+            token: "\(tokentype)\(token)",
             delegate: self,
             configuration: [
                 .intents([.allIntents])
@@ -59,6 +72,12 @@ class Bot: DiscordClientDelegate {
         )
         cliente.connect()
         wow(cliente)
+        let botlink = cliente.getBotURL(with: DiscordPermissions(590980454018134))
+        logger.info("Bot started as \((cliente.user)!.username!) (\((cliente.user)!.id)) • Is Bot: \((cliente.user)!.bot!)")
+        if (((cliente.user)!.bot!) == true) {
+            logger.info("Bot invite: \(botlink!)")
+        }
+        else {}
     }
     
     func sybau() {
@@ -77,6 +96,7 @@ class Bot: DiscordClientDelegate {
             afkSince: nil
         )
         cliente.setPresence(newPresence)
+        
     }
    
     func wow(_ client: DiscordClient) {

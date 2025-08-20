@@ -9,7 +9,12 @@ import SwiftUI
 
 final class TempVars: ObservableObject {
     static let shared = TempVars()
-    @Published var hasStarted: Bool = false
+    @Published var hasStarted: Bool = false {
+        didSet {
+            disabled = !hasStarted
+        }
+    }
+    @Published var disabled: Bool = true
     private init() {}
 }
 
@@ -56,27 +61,34 @@ struct Main: View {
                     }
                 }
                 HStack {
-                    Text("Start, or stop the bot!")
+                Text("Start, or stop the bot!")
+                if tmp.hasStarted == false {
                     Button(action: {
-                        tmp.hasStarted.toggle()
+                        tmp.hasStarted = true
                         manager.startBot()
-                    }) {
-                        Text(tmp.hasStarted ? "Stop" : "Start")
-                    }
+                    }, label: {Text("Start")})
+                    .frame(alignment: .trailing)
                 }
+                else {
+                    Button(action: {
+                        tmp.hasStarted = false
+                        manager.stopBot()
+                    }, label: {Text("Stop")})
+                    .frame(alignment: .trailing)
+                }
+            }
                 HStack {
                     Text("Restart the bot (use when refreshing presence)")
-                    let btn = Button("Restart") {
+                    Button("Restart") {
                         manager.stopBot()
                         TempVars.shared.hasStarted.toggle()
-                        manager.startBot()
-                        TempVars.shared.hasStarted.toggle()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                            manager.startBot()
+                            TempVars.shared.hasStarted.toggle()
+                        }
                     }
                     .frame(alignment: .trailing)
-                    if TempVars.shared.hasStarted == true {
-                        btn.disabled(true)
-                    }
-                    btn
+                    .disabled(TempVars.shared.disabled)
                 }
             }
         }

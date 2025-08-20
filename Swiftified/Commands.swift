@@ -10,9 +10,12 @@ import Discord
 import Foundation
 import Logging
 
+fileprivate var logger = Logger(label: "SwiftifiedCommands")
+
 struct Commands {
     @AppStorage("prefix") var prefix: String = ""
     class PrefixedCommands {
+        @StateObject var manager = BotManager()
         @ObservedObject var tmp = TempVars.shared
         @AppStorage("prefix") var prefix: String = ""
         init() {}
@@ -59,11 +62,15 @@ struct Commands {
             if command == "sybau" {
                 let authorw = author?.id
                 let author2 = authorw!
-                print("User ID: \"\(author2)\" (AKA \"\((author?.username)!)\") ran sybau command")
+                logger.info("User ID: \"\(author2)\" (AKA \"\((author?.username)!)\") ran sybau command")
                 if "\(author2)" == "808606684837576714" {
-                    client.sendMessage("Shutting down...", to: ctx)
-                    client.disconnect()
-                    tmp.hasStarted = false
+                    let time = Date().timeIntervalSince1970
+                    client.sendMessage(DiscordMessage(content: "Shutting down... in <t:\(Int(time) + 10):R>"), to: ctx)
+                    logger.warning("Shutting down in 10")
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
+                        client.disconnect()
+                        TempVars.shared.hasStarted.toggle()
+                    }
                 }
                 else {
                     let noprms = Commands().noPerms(userID: author2, command: "sybau")
