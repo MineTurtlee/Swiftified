@@ -104,6 +104,7 @@ class Bot: DiscordClientDelegate {
             Thread.sleep(forTimeInterval: 0.1)
         }
         publishPresence()
+        Commands.SlashCommands(cliente, initTree: true)
     }
     
     func client(_ client: DiscordClient, didCreateMessage message: DiscordMessage) {
@@ -115,6 +116,15 @@ class Bot: DiscordClientDelegate {
         }
         else {
             Responses(client: client, message: message)
+        }
+    }
+    
+    func client(_ client: DiscordClient, didCreateInteraction interaction: DiscordInteraction) {
+        switch interaction {
+        case let interaction:
+            Commands.SlashCommands(cliente).invokeCommand(cliente, interaction: interaction)
+        default:
+            break
         }
     }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		651A2FD42E59B125003C1742 /* SwiftyPing in Frameworks */ = {isa = PBXBuildFile; productRef = 651A2FD32E59B125003C1742 /* SwiftyPing */; };
 		65430BF72E49AF0C00D5AE1F /* Discord in Frameworks */ = {isa = PBXBuildFile; productRef = 65430BF62E49AF0C00D5AE1F /* Discord */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				651A2FD42E59B125003C1742 /* SwiftyPing in Frameworks */,
 				65430BF72E49AF0C00D5AE1F /* Discord in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -84,6 +86,7 @@
 			name = Swiftified;
 			packageProductDependencies = (
 				65430BF62E49AF0C00D5AE1F /* Discord */,
+				651A2FD32E59B125003C1742 /* SwiftyPing */,
 			);
 			productName = Swiftified;
 			productReference = 654C08032E48B64700B4B8E4 /* Swiftified.app */;
@@ -115,6 +118,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				65430BF52E49AF0C00D5AE1F /* XCRemoteSwiftPackageReference "swift-discord" */,
+				651A2FD22E59B125003C1742 /* XCRemoteSwiftPackageReference "SwiftyPing" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 654C08042E48B64700B4B8E4 /* Products */;
@@ -355,6 +359,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		651A2FD22E59B125003C1742 /* XCRemoteSwiftPackageReference "SwiftyPing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/samiyr/SwiftyPing.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		65430BF52E49AF0C00D5AE1F /* XCRemoteSwiftPackageReference "swift-discord" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/fwcd/swift-discord";
@@ -366,6 +378,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		651A2FD32E59B125003C1742 /* SwiftyPing */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 651A2FD22E59B125003C1742 /* XCRemoteSwiftPackageReference "SwiftyPing" */;
+			productName = SwiftyPing;
+		};
 		65430BF62E49AF0C00D5AE1F /* Discord */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 65430BF52E49AF0C00D5AE1F /* XCRemoteSwiftPackageReference "swift-discord" */;

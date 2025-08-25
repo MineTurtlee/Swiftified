@@ -1,5 +1,5 @@
 {
-  "originHash" : "c8b2cea4f38f86f64a101f96a779079c342c3d21224753496b090a68887c04c2",
+  "originHash" : "3167d8098e8a22542d06034d6ec546181d180b3f061139984a6353b6bc47d593",
   "pins" : [
     {
       "identity" : "bigint",
@@ -179,6 +179,15 @@
       "state" : {
         "revision" : "890830fff1a577dc83134890c7984020c5f6b43b",
         "version" : "1.6.2"
+      }
+    },
+    {
+      "identity" : "swiftyping",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/samiyr/SwiftyPing.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "05591bc0047e41e0e1d98135c6bc457192a72d39"
       }
     },
     {
