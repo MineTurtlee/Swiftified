@@ -23,6 +23,7 @@ class Bot: DiscordClientDelegate {
     @AppStorage("statusName") public var statusName: String = ""
     @AppStorage("prefix") public var prefix: String = "!"
     @AppStorage("tokenType") var tokenType: String = "Bot"
+    lazy var slashHandler = SlashCommands(cliente)
     private var statusMode: DiscordActivityType? = nil
     public var cliente: DiscordClient!
     private var statuspid: DiscordPresenceStatus = .online
@@ -110,21 +111,26 @@ class Bot: DiscordClientDelegate {
     func client(_ client: DiscordClient, didCreateMessage message: DiscordMessage) {
         let ctx = message.channelId
         let cotnetn = message.content
-        if ((cotnetn?.starts(with: "sw!")) != nil) {
-            let command = cotnetn?.replacingOccurrences(of: "sw!", with: "")
+        if ((cotnetn?.starts(with: prefix)) == true) {
+            let command = cotnetn?.replacingOccurrences(of: prefix, with: "")
             PrefixedCommands().invokeCommand(command: command!, client: client, ctx: ctx, message: message)
+            return
         }
-        else {
-            Responses(client: client, message: message)
-        }
+        Responses(client: client, message: message)
     }
     
     func client(_ client: DiscordClient, didCreateInteraction interaction: DiscordInteraction) {
-        switch interaction {
-        case let interaction:
-            SlashCommands(cliente).invokeCommand(cliente, interaction: interaction)
-        default:
-            break
-        }
+        switch interaction.type {
+            case .applicationCommand:
+                // This is ONLY for `/slash` commands
+                slashHandler.invokeCommand(client, interaction: interaction)
+
+            case .messageComponent:
+                // Handle button presses here if you need
+                logger.info("Received a button/interaction, not a slash command")
+
+            default:
+                logger.debug("Unhandled interaction type: \(interaction.type!)")
+            }
     }
 }

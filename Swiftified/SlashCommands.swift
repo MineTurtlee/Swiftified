@@ -11,7 +11,59 @@ import Foundation
 
 fileprivate let logger = Logger(label: "SlashCommands")
 
+/* func updateInteractionResponse(applicationId: String, token: String, newContent: String) async throws {
+ let url = URL(string: "https://discord.com/api/v10/webhooks/\(applicationId)/\(token)/messages/@original")!
+ 
+ var request = URLRequest(url: url)
+ request.httpMethod = "PATCH"
+ request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+ 
+ let body: [String: Any] = [
+     "content": newContent
+ ]
+ 
+ request.httpBody = try JSONSerialization.data(withJSONObject: body)
+ 
+ let (data, response) = try await URLSession.shared.data(for: request)
+ 
+ if let httpResponse = response as? HTTPURLResponse {
+     print("Status: \(httpResponse.statusCode)")
+ }
+ 
+ print(String(data: data, encoding: .utf8) ?? "")
+} */
+
 class SlashCommands {
+    @StateObject var manager = BotManager()
+    @ObservedObject var tmp = TempVars.shared
+    @AppStorage("prefix") var prefix: String = "!"
+    func createCallback(_ command: DiscordApplicationCommand, response: HTTPURLResponse) {
+        if let cmd = Optional(command) {
+            logger.info("Successfully created command: \(cmd.name)")
+        } else if let resp = Optional(response) {
+            logger.warning("Failed to create command. Status: \(resp.statusCode)")
+        } else {
+            logger.error("Unknown error while creating command.")
+        }
+    }
+    func updateMessage(_ client: DiscordClient, interaction: DiscordInteraction, content: String) async throws {
+        let url = URL(string: "https://discord.com/api/v10/webhooks/\(client.user!.id)/\(interaction.token)/messages/@original")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let body: [String: Any] = [
+            "content": content
+        ]
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        if let httpResponse = response as? HTTPURLResponse {
+            logger.info("Status: \(httpResponse.statusCode)")
+        }
+    }
+    
     init(_ client: DiscordClient, initTree: Bool = false) {
         if initTree == true {
             client.createApplicationCommand(
@@ -19,36 +71,37 @@ class SlashCommands {
                 description: "Test command for turtle to test wink wink",
                 options: nil
             ) { command, response in
-                    if let cmd = command {
-                        logger.info("Successfully created command: \(cmd.name)")
-                    } else if let resp = response {
-                        logger.warning("Failed to create command. Status: \(resp.statusCode)")
-                    } else {
-                        logger.error("Unknown error while creating command.")
-                    }
-                }
-                
-                client.createApplicationCommand(
-                    name: "help",
-                    description: "Help for Swiftified (well uh you know what, this thing is bad)",
-                    options: nil
-                ) { command, response in
-                    if let cmd = command {
-                        logger.info("Successfully created command: \(cmd.name)")
-                    } else if let resp = response {
-                        logger.warning("Failed to create command. Status: \(resp.statusCode)")
-                    } else {
-                        logger.error("Unknown error while creating command.")
-                    }
-                }
+                self.createCallback(command!, response: response!)
             }
-            else {
+            client.createApplicationCommand(
+                name: "help",
+                description: "Help for Swiftified (well uh you know what, this thing is bad)",
+                options: nil
+            ) { command, response in
+                self.createCallback(command!, response: response!)
             }
+            client.createApplicationCommand(
+                name: "ping",
+                description: "Ping pong",
+                options: nil
+            ) { command, response in
+                self.createCallback(command!, response: response!)
+            }
+            client.createApplicationCommand(
+                name: "sybau",
+                description: "Turn off the bot [Owner-only]", options: nil) { command, response in
+                    self.createCallback(command!, response: response!)
+                }
         }
+        else {
+        }
+    }
                 
         func invokeCommand(_ client: DiscordClient, interaction: DiscordInteraction) {
             let command = interaction.data?.name!
-            let prefix = Commands().prefix
+            let prefix = prefix
+            let id = interaction.id
+            let token = interaction.token
             
             if command == "test" {
                 let response = DiscordInteractionResponse(
@@ -73,45 +126,6 @@ class SlashCommands {
                         logger.warning("Failed to get response from Discord")
                     }
                 }
-            }
-            
-            if command == "ping" {
-                // Step A: send deferred response so Discord shows "thinking..."
-                let deferred = DiscordInteractionResponse(type: .deferredChannelMessageWithSource)
-                client.createInteractionResponse(for: interaction.id, token: interaction.token, response: deferred)
-                var numAddress: String = ""
-
-                let host = CFHostCreateWithName(nil,"gateway.discord.com" as CFString).takeRetainedValue()
-                CFHostStartInfoResolution(host, .addresses, nil)
-                var success: DarwinBoolean = false
-                if let addresses = CFHostGetAddressing(host, &success)?.takeUnretainedValue() as NSArray?,
-                    let theAddress = addresses.firstObject as? NSData {
-                    var hostname = [CChar](repeating: 0, count: Int(NI_MAXHOST))
-                    if getnameinfo(theAddress.bytes.assumingMemoryBound(to: sockaddr.self), socklen_t(theAddress.length),
-                                   &hostname, socklen_t(hostname.count), nil, 0, NI_NUMERICHOST) == 0 {
-                        numAddress = String(cString: hostname)
-                    }
-                }
-                    // Step C: run your Pinger against the resolved IP
-                let latency = Pinger().ping(numAddress, times: 1)
-
-                    // Step D: send the latency back as an updated message
-                let url = URL(string: "https://discord.com/api/v10/webhooks/\(client.user!.id)/\(interaction.token)/messages/@original")!
-                var request = URLRequest(url: url)
-                request.httpMethod = "PATCH"
-                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-                request.httpBody = try? JSONSerialization.data(withJSONObject: [
-                    "content": "Pong! Latency: \(latency) ms"
-                ])
-
-                URLSession.shared.dataTask(with: request) { data, response, error in
-                    if let error = error {
-                        print("Edit error: \(error)")
-                    }
-                    if let http = response as? HTTPURLResponse {
-                        print("Edited original message, status: \(http.statusCode)")
-                    }
-                }.resume()
             }
             
             if command == "help" {
@@ -151,6 +165,69 @@ class SlashCommands {
                     )]
                 ))
                 client.createInteractionResponse(for: interaction.id, token: interaction.token, response: response)
+            }
+            
+            if command == "ping" {
+                client.createInteractionResponse(for: interaction.id, token: interaction.token, response: DiscordInteractionResponse(type: .deferredChannelMessageWithSource))
+                
+                guard let url = URL(string: "https://discord.com/api/v10/gateway") else {
+                    logger.error("Invalid ping URL.")
+                    Task {
+                        try? await self.updateMessage(
+                            client,
+                            interaction: interaction,
+                            content: "Invalid ping URL, please contact the devs"
+                        )
+                    }
+                    return
+                }
+                let startTime = Date()
+                
+                let task = URLSession.shared.dataTask(with: url) { data, response, error in
+                    let latency = Int(Date().timeIntervalSince(startTime) * 1000)
+                    
+                    if let error = error {
+                        logger.warning("Request failed: \(error.localizedDescription)")
+                        Task {
+                            try? await self.updateMessage(
+                                client,
+                                interaction: interaction,
+                                content: "Request failed, please contact the devs"
+                            )
+                        }
+                    }
+                    
+                    guard let httpResponse = response as? HTTPURLResponse else {
+                        logger.error("Invalid response")
+                        client.createInteractionResponse(for: interaction.id, token: interaction.token, response: DiscordInteractionResponse(type: .channelMessageWithSource, data: DiscordInteractionApplicationCommandCallbackData(content: "Invalid response")))
+                        return
+                    }
+                    Task {
+                        try? await self.updateMessage(
+                            client,
+                            interaction: interaction,
+                            content: "Pong! The latency is \(latency)ms"
+                        )
+                    }
+                }
+                task.resume()
+            }
+            
+            if command == "sybau" {
+                let author = interaction.member?.id
+                if author == 808606684837576714 {
+                    let time = Int(Date().timeIntervalSince1970)
+                    client.createInteractionResponse(for: interaction.id, token: interaction.token, response: DiscordInteractionResponse(type: .channelMessageWithSource, data: DiscordInteractionApplicationCommandCallbackData(content: "Shutting down in <t:\(time + 10):R>")))
+                    logger.warning("Shutting down in 10")
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
+                        client.disconnect()
+                        TempVars.shared.hasStarted.toggle()
+                    }
+                }
+                else {
+                    let noshit = noPerms(userID: author!, command: "sybau", prefix: "/")
+                    client.createInteractionResponse(for: id, token: token, response: DiscordInteractionResponse(type: .channelMessageWithSource, data: DiscordInteractionApplicationCommandCallbackData(content: noshit)))
+                }
             }
         }
     }
