@@ -57,7 +57,7 @@ class PrefixedCommands {
                 ]
             ), to: ctx)
         }
-            
+        
         if command.starts(with: "echo") {
             let message = command.replacingOccurrences(of: "echo ", with: "")
             let authorid = author?.id
@@ -91,17 +91,17 @@ class PrefixedCommands {
                             ) { member, response in
                                 if let response = response {
                                     if (response.statusCode == 200 || response.statusCode == 204) {
-                                            client.sendMessage(
-                                                DiscordMessage(
-                                                    embeds: [
-                                                        DiscordEmbed(
-                                                            title: "<:success:1407930251698376725> Ban successful",
-                                                            description:
+                                        client.sendMessage(
+                                            DiscordMessage(
+                                                embeds: [
+                                                    DiscordEmbed(
+                                                        title: "<:success:1407930251698376725> Ban successful",
+                                                        description:
                                                                 """
 Successfully banned user <@\(String(user3.rawValue))>
 Reason: \(reason)
 """)]), to: ctx)
-                            }
+                                    }
                                     else {
                                         client.sendMessage(DiscordMessage(content: "<:fail:1407930342605717576> Unable to send message, plz check yer logs"), to: ctx)
                                     }
@@ -139,25 +139,21 @@ Reason: \(reason)
             }
         }
         if command == "ping" {
-            guard let url = URL(string: "https://discord.com/api/v7/gateway") else {
-                logger.error("Invalid ping URL.")
-                client.sendMessage("Invalid ping url, please contact the devs", to: ctx)
-                return
-            }
-            let startTime = Date()
-            
-            let task = URLSession.shared.dataTask(with: url) { data, response, error in
-                let latency = Int(Date().timeIntervalSince(startTime) * 1000)
-                
-                if let error = error {
-                    logger.warning("Request failed: \(error.localizedDescription)")
-                    client.sendMessage("Request failed, please contact devs", to: ctx)
-                }
-                
-                guard let httpResponse = response as? HTTPURLResponse else {
-                    logger.error("Invalid response")
-                    client.sendMessage("Invalid response, please contact devs", to: ctx)
-                    return
+            Task {
+                do {
+                    let latencies = try await ping()
+                    let apiLatency = latencies.first ?? -1
+                    let wsLatency  = latencies.last ?? -1
+                    
+                    client.sendMessage(
+                        DiscordMessage(
+                            stringLiteral: "Pong!\nAPI latency: \(apiLatency)ms\nWebSocket latency: \(wsLatency)ms\nAverage: \((max(apiLatency, wsLatency) - min(apiLatency, wsLatency)) / 2)ms"
+                        ),
+                        to: ctx
+                    )
+                } catch {
+                    logger.error("Ping failed: \(error.localizedDescription)")
+                    client.sendMessage("Failed to measure latency, please contatc devs", to: ctx)
                 }
             }
         }

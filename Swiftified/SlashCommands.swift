@@ -168,49 +168,32 @@ class SlashCommands {
             }
             
             if command == "ping" {
-                client.createInteractionResponse(for: interaction.id, token: interaction.token, response: DiscordInteractionResponse(type: .deferredChannelMessageWithSource))
-                
-                guard let url = URL(string: "https://discord.com/api/v10/gateway") else {
-                    logger.error("Invalid ping URL.")
-                    Task {
+                client.createInteractionResponse(
+                    for: interaction.id,
+                    token: interaction.token,
+                    response: DiscordInteractionResponse(type: .deferredChannelMessageWithSource)
+                )
+
+                Task {
+                    do {
+                        let latencies = try await ping()
+                        let apiLatency = latencies.first ?? -1
+                        let wsLatency  = latencies.last ?? -1
+
+                        try await self.updateMessage(
+                            client,
+                            interaction: interaction,
+                            content: "Pong!\nAPI latency: \(apiLatency)ms\nWebSocket latency: \(wsLatency)ms\nAverage: \((max(apiLatency, wsLatency) - min(apiLatency, wsLatency)) / 2)ms"
+                        )
+                    } catch {
+                        logger.error("Ping failed: \(error.localizedDescription)")
                         try? await self.updateMessage(
                             client,
                             interaction: interaction,
-                            content: "Invalid ping URL, please contact the devs"
-                        )
-                    }
-                    return
-                }
-                let startTime = Date()
-                
-                let task = URLSession.shared.dataTask(with: url) { data, response, error in
-                    let latency = Int(Date().timeIntervalSince(startTime) * 1000)
-                    
-                    if let error = error {
-                        logger.warning("Request failed: \(error.localizedDescription)")
-                        Task {
-                            try? await self.updateMessage(
-                                client,
-                                interaction: interaction,
-                                content: "Request failed, please contact the devs"
-                            )
-                        }
-                    }
-                    
-                    guard let httpResponse = response as? HTTPURLResponse else {
-                        logger.error("Invalid response")
-                        client.createInteractionResponse(for: interaction.id, token: interaction.token, response: DiscordInteractionResponse(type: .channelMessageWithSource, data: DiscordInteractionApplicationCommandCallbackData(content: "Invalid response")))
-                        return
-                    }
-                    Task {
-                        try? await self.updateMessage(
-                            client,
-                            interaction: interaction,
-                            content: "Pong! The latency is \(latency)ms"
+                            content: "Pong!\nFailed to measure latency."
                         )
                     }
                 }
-                task.resume()
             }
             
             if command == "sybau" {
