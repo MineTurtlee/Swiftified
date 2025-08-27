@@ -92,12 +92,27 @@ class SlashCommands {
                 description: "Turn off the bot [Owner-only]", options: nil) { command, response in
                     self.createCallback(command!, response: response!)
                 }
+            client.createApplicationCommand(
+                name: "echo",
+                description: "Make the bot say anything",
+                options: [
+                    DiscordApplicationCommandOption(
+                        type: .string,
+                        name: "message",
+                        description: "What to say",
+                        isRequired: true
+                    )
+                ]
+            ) { command, response in
+                    self.createCallback(command!, response: response!)
+            }
         }
         else {
         }
     }
                 
         func invokeCommand(_ client: DiscordClient, interaction: DiscordInteraction) {
+            // TODO: Switch to switch case, instead of if.
             let command = interaction.data?.name!
             let prefix = prefix
             let id = interaction.id
@@ -210,6 +225,14 @@ class SlashCommands {
                 else {
                     let noshit = noPerms(userID: author!, command: "sybau", prefix: "/")
                     client.createInteractionResponse(for: id, token: token, response: DiscordInteractionResponse(type: .channelMessageWithSource, data: DiscordInteractionApplicationCommandCallbackData(content: noshit)))
+                }
+            }
+            if command == "echo" {
+                if let message = interaction.data?.options?.first(where: {$0.name == "message"}),
+                   case let .string(text) = message.value {
+                    client.createInteractionResponse(for: id, token: token, response: DiscordInteractionResponse(type: .channelMessageWithSource, data: DiscordInteractionApplicationCommandCallbackData(
+                        content: "Hello! You said `\(text)`\n-# Replied to <@\(interaction.member!.user.id)>"
+                    )))
                 }
             }
         }

@@ -1,5 +1,5 @@
 {
-  "originHash" : "3167d8098e8a22542d06034d6ec546181d180b3f061139984a6353b6bc47d593",
+  "originHash" : "e0a4f72e7251c180ef14aff6b3ecc5da1fa70ebc75755e028b8b186b22e91dd9",
   "pins" : [
     {
       "identity" : "bigint",
@@ -76,10 +76,10 @@
     {
       "identity" : "swift-discord",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/fwcd/swift-discord",
+      "location" : "https://github.com/MineTurtlee/swift-discord",
       "state" : {
-        "branch" : "main",
-        "revision" : "68aaefb810eb53354522ea62071542bc807e2035"
+        "branch" : "to-do-resolve",
+        "revision" : "e875a74159f4335f12c2bdb362f42876fe982562"
       }
     },
     {

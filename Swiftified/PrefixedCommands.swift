@@ -17,6 +17,7 @@ class PrefixedCommands {
     @AppStorage("prefix") var prefix: String = ""
     init() {}
     func invokeCommand(command: String, client: DiscordClient, ctx: ChannelID, message: DiscordMessage) {
+        // TODO: Switch to switch case, instead of if.
         let author = message.author
         if command == "help" {
             client.sendMessage(DiscordMessage(

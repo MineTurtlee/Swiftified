@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		651A2FD42E59B125003C1742 /* SwiftyPing in Frameworks */ = {isa = PBXBuildFile; productRef = 651A2FD32E59B125003C1742 /* SwiftyPing */; };
-		65430BF72E49AF0C00D5AE1F /* Discord in Frameworks */ = {isa = PBXBuildFile; productRef = 65430BF62E49AF0C00D5AE1F /* Discord */; };
+		6566B73A2E5F4B3000F33A58 /* Discord in Frameworks */ = {isa = PBXBuildFile; productRef = 6566B7392E5F4B3000F33A58 /* Discord */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,7 +42,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				651A2FD42E59B125003C1742 /* SwiftyPing in Frameworks */,
-				65430BF72E49AF0C00D5AE1F /* Discord in Frameworks */,
+				6566B73A2E5F4B3000F33A58 /* Discord in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,8 +85,8 @@
 			);
 			name = Swiftified;
 			packageProductDependencies = (
-				65430BF62E49AF0C00D5AE1F /* Discord */,
 				651A2FD32E59B125003C1742 /* SwiftyPing */,
+				6566B7392E5F4B3000F33A58 /* Discord */,
 			);
 			productName = Swiftified;
 			productReference = 654C08032E48B64700B4B8E4 /* Swiftified.app */;
@@ -117,8 +117,8 @@
 			mainGroup = 654C07FA2E48B64700B4B8E4;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				65430BF52E49AF0C00D5AE1F /* XCRemoteSwiftPackageReference "swift-discord" */,
 				651A2FD22E59B125003C1742 /* XCRemoteSwiftPackageReference "SwiftyPing" */,
+				6566B7382E5F4B3000F33A58 /* XCRemoteSwiftPackageReference "swift-discord" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 654C08042E48B64700B4B8E4 /* Products */;
@@ -367,11 +367,11 @@
 				kind = branch;
 			};
 		};
-		65430BF52E49AF0C00D5AE1F /* XCRemoteSwiftPackageReference "swift-discord" */ = {
+		6566B7382E5F4B3000F33A58 /* XCRemoteSwiftPackageReference "swift-discord" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/fwcd/swift-discord";
+			repositoryURL = "https://github.com/MineTurtlee/swift-discord";
 			requirement = {
-				branch = main;
+				branch = "to-do-resolve";
 				kind = branch;
 			};
 		};
@@ -383,9 +383,9 @@
 			package = 651A2FD22E59B125003C1742 /* XCRemoteSwiftPackageReference "SwiftyPing" */;
 			productName = SwiftyPing;
 		};
-		65430BF62E49AF0C00D5AE1F /* Discord */ = {
+		6566B7392E5F4B3000F33A58 /* Discord */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 65430BF52E49AF0C00D5AE1F /* XCRemoteSwiftPackageReference "swift-discord" */;
+			package = 6566B7382E5F4B3000F33A58 /* XCRemoteSwiftPackageReference "swift-discord" */;
 			productName = Discord;
 		};
 /* End XCSwiftPackageProductDependency section */
