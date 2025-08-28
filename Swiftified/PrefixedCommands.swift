@@ -17,9 +17,13 @@ class PrefixedCommands {
     @AppStorage("prefix") var prefix: String = ""
     init() {}
     func invokeCommand(command: String, client: DiscordClient, ctx: ChannelID, message: DiscordMessage) {
-        // TODO: Switch to switch case, instead of if.
         let author = message.author
-        if command == "help" {
+        let components = command.split(separator: " ", omittingEmptySubsequences: true)
+        let cmd = String(components.first ?? "")
+        let args = components.count > 1 ? String(components[1]) : ""
+        
+        switch cmd {
+        case "help":
             client.sendMessage(DiscordMessage(
                 embeds: [
                     DiscordEmbed(
@@ -57,71 +61,70 @@ class PrefixedCommands {
                     )
                 ]
             ), to: ctx)
-        }
-        
-        if command.starts(with: "echo") {
+            
+        case "echo":
             let message = command.replacingOccurrences(of: "echo ", with: "")
             let authorid = author?.id
             client.sendMessage(DiscordMessage(content: "Hello! You said \(message)\n-# replied to <@\(authorid!)>"), to: ctx)
-        }
-        if command.starts(with: "ban") {
-            let args = command.replacingOccurrences(of: "ban ", with: "")
+        case "ban":
+            let cleanedArgs = args
                 .replacingOccurrences(of: "<@!", with: "")
                 .replacingOccurrences(of: "<@", with: "")
                 .replacingOccurrences(of: ">", with: "")
             
-            let components = args.split(separator: " ", maxSplits: 1, omittingEmptySubsequences: true)
+            let banComponents = cleanedArgs.split(separator: " ", maxSplits: 1, omittingEmptySubsequences: true)
+            let user = String(banComponents[0])
+            let reason = banComponents.count > 1 ? String(banComponents[1]) : "No reason (ask them for proof)"
             
-            let user = String(components[0])
-            let reason = components.count > 1 ? String(components[1]) : "No reason (ask them for proof)"
-            
-            let guild = message.guildId
-            if guild != nil {
-                let parsedGuild = parseGuild(guildId: guild!, client: client)
-                client.getGuildMember(by: (author?.id)!, on: guild!) { member, response in
+            if let guild = message.guildId {
+                let parsedGuild = parseGuild(guildId: guild, client: client)
+                client.getGuildMember(by: author?.id ?? 0, on: guild) { member, response in
                     if let member = member {
-                        let dam = parsedGuild.canMember(member, DiscordPermissions(4), in: ctx)
-                        if dam == true {
-                            let user2 = UInt64(user)
-                            let user3 = UserID(integerLiteral: user2!)
-                            client.guildBan(
-                                userId: user3,
-                                on: guild!,
-                                deleteMessageDays: 7,
-                                reason: "Banned by <@\((author?.id)!)>: \(reason)",
-                            ) { member, response in
-                                if let response = response {
-                                    if (response.statusCode == 200 || response.statusCode == 204) {
-                                        client.sendMessage(
-                                            DiscordMessage(
-                                                embeds: [
-                                                    DiscordEmbed(
-                                                        title: "<:success:1407930251698376725> Ban successful",
-                                                        description:
-                                                                """
-Successfully banned user <@\(String(user3.rawValue))>
-Reason: \(reason)
-""")]), to: ctx)
+                        let canBan = parsedGuild.canMember(member, DiscordPermissions(4), in: ctx)
+                        if canBan {
+                            if let userId = UInt64(user) {
+                                let discordUserId = UserID(integerLiteral: userId)
+                                client.guildBan(
+                                    userId: discordUserId,
+                                    on: guild,
+                                    deleteMessageDays: 7,
+                                    reason: "Banned by <@\(author?.id ?? 0)>: \(reason)"
+                                ) { _, response in
+                                    if let response = response {
+                                        if response.statusCode == 200 || response.statusCode == 204 {
+                                            client.sendMessage(
+                                                DiscordMessage(
+                                                    embeds: [
+                                                        DiscordEmbed(
+                                                            title: "<:success:1407930251698376725> Ban successful",
+                                                            description:
+                                                            """
+                                                            Successfully banned user <@\(discordUserId.rawValue)>
+                                                            Reason: \(reason)
+                                                            """
+                                                        )
+                                                    ]
+                                                ),
+                                                to: ctx
+                                            )
+                                        } else {
+                                            client.sendMessage(
+                                                DiscordMessage(content: "<:fail:1407930342605717576> Unable to send message, plz check yer logs"),
+                                                to: ctx
+                                            )
+                                        }
                                     }
-                                    else {
-                                        client.sendMessage(DiscordMessage(content: "<:fail:1407930342605717576> Unable to send message, plz check yer logs"), to: ctx)
-                                    }
-                                }
-                                else {
-                                    // client.sendMessage(DiscordMessage(content: "\(response.statusCode)"), to: ctx)
                                 }
                             }
                         }
-                    } else {
                     }
                     if let response = response {
                         logger.info("Response code: \(response.statusCode)")
                     }
                 }
             }
-        }
-        
-        if command == "sybau" {
+            
+        case "sybau":
             let authorw = author?.id
             let author2 = authorw!
             logger.info("User ID: \"\(author2)\" (AKA \"\((author?.username)!)\") ran sybau command")
@@ -138,8 +141,7 @@ Reason: \(reason)
                 let noprms = noPerms(userID: author2, command: "sybau", prefix: prefix)
                 client.sendMessage(DiscordMessage(content: noprms), to: ctx)
             }
-        }
-        if command == "ping" {
+        case "ping":
             Task {
                 do {
                     let latencies = try await ping()
@@ -157,6 +159,8 @@ Reason: \(reason)
                     client.sendMessage("Failed to measure latency, please contatc devs", to: ctx)
                 }
             }
+        default:
+            return
         }
     }
 }

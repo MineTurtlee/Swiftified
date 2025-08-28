@@ -46,23 +46,6 @@ class SlashCommands {
             logger.error("Unknown error while creating command.")
         }
     }
-    func updateMessage(_ client: DiscordClient, interaction: DiscordInteraction, content: String) async throws {
-        let url = URL(string: "https://discord.com/api/v10/webhooks/\(client.user!.id)/\(interaction.token)/messages/@original")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "PATCH"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let body: [String: Any] = [
-            "content": content
-        ]
-        request.httpBody = try JSONSerialization.data(withJSONObject: body)
-        
-        let (data, response) = try await URLSession.shared.data(for: request)
-        
-        if let httpResponse = response as? HTTPURLResponse {
-            logger.info("Status: \(httpResponse.statusCode)")
-        }
-    }
     
     init(_ client: DiscordClient, initTree: Bool = false) {
         if initTree == true {
@@ -106,19 +89,27 @@ class SlashCommands {
             ) { command, response in
                     self.createCallback(command!, response: response!)
             }
+            client.createApplicationCommand(
+                name: "ban",
+                description: "Ban an user off of your server.",
+                options: [DiscordApplicationCommandOption(type: .user, name: "user", description: "User to ban", isRequired: true),
+                          DiscordApplicationCommandOption(type: .string, name: "reason", description: "Reason to ban")]
+            ) { command, response in
+                self.createCallback(command!, response: response!)
+            }
         }
         else {
         }
     }
                 
         func invokeCommand(_ client: DiscordClient, interaction: DiscordInteraction) {
-            // TODO: Switch to switch case, instead of if.
             let command = interaction.data?.name!
             let prefix = prefix
             let id = interaction.id
             let token = interaction.token
             
-            if command == "test" {
+            switch command {
+            case "test":
                 let response = DiscordInteractionResponse(
                     type: .channelMessageWithSource,
                     data: DiscordInteractionApplicationCommandCallbackData(
@@ -141,9 +132,8 @@ class SlashCommands {
                         logger.warning("Failed to get response from Discord")
                     }
                 }
-            }
             
-            if command == "help" {
+            case "help":
                 let response = DiscordInteractionResponse(type: .channelMessageWithSource, data: DiscordInteractionApplicationCommandCallbackData(
                     embeds: [DiscordEmbed(
                         title: "Help",
@@ -180,9 +170,8 @@ class SlashCommands {
                     )]
                 ))
                 client.createInteractionResponse(for: interaction.id, token: interaction.token, response: response)
-            }
             
-            if command == "ping" {
+            case "ping":
                 client.createInteractionResponse(
                     for: interaction.id,
                     token: interaction.token,
@@ -195,23 +184,22 @@ class SlashCommands {
                         let apiLatency = latencies.first ?? -1
                         let wsLatency  = latencies.last ?? -1
 
-                        try await self.updateMessage(
+                        try await updateMessage(
                             client,
                             interaction: interaction,
                             content: "Pong!\nAPI latency: \(apiLatency)ms\nWebSocket latency: \(wsLatency)ms\nAverage: \((max(apiLatency, wsLatency) - min(apiLatency, wsLatency)) / 2)ms"
                         )
                     } catch {
                         logger.error("Ping failed: \(error.localizedDescription)")
-                        try? await self.updateMessage(
+                        try? await updateMessage(
                             client,
                             interaction: interaction,
                             content: "Pong!\nFailed to measure latency."
                         )
                     }
                 }
-            }
             
-            if command == "sybau" {
+            case "sybau":
                 let author = interaction.member?.id
                 if author == 808606684837576714 {
                     let time = Int(Date().timeIntervalSince1970)
@@ -226,14 +214,38 @@ class SlashCommands {
                     let noshit = noPerms(userID: author!, command: "sybau", prefix: "/")
                     client.createInteractionResponse(for: id, token: token, response: DiscordInteractionResponse(type: .channelMessageWithSource, data: DiscordInteractionApplicationCommandCallbackData(content: noshit)))
                 }
-            }
-            if command == "echo" {
+                
+            case "echo":
                 if let message = interaction.data?.options?.first(where: {$0.name == "message"}),
                    case let .string(text) = message.value {
                     client.createInteractionResponse(for: id, token: token, response: DiscordInteractionResponse(type: .channelMessageWithSource, data: DiscordInteractionApplicationCommandCallbackData(
                         content: "Hello! You said `\(text)`\n-# Replied to <@\(interaction.member!.user.id)>"
                     )))
                 }
+            case "ban":
+                client.createInteractionResponse(for: id, token: token, response: DiscordInteractionResponse(type: .deferredChannelMessageWithSource))
+                if let optns = interaction.data?.options {
+                    let madedict = Dictionary(uniqueKeysWithValues: optns.map { ($0.name, $0)})
+                    
+                    if let guild = Optional(interaction.guildId) {
+                        let author = interaction.member
+                        let parsedGuild = parseGuild(guildId: guild, client: client)
+                        if parsedGuild.canMember(author!, DiscordPermissions(arrayLiteral: .kickMembers), in: interaction.channelId) {
+                            Task {
+                                try? await updateMessage(client, interaction: interaction, content: "Still in progress, plz wait!")
+                            }
+                        }
+                        else {
+                            let darn = noPerms(userID: (author?.id)!, command: "ban", prefix: "/")
+                            Task {
+                                try? await updateMessage(client, interaction: interaction, content: darn)
+                            }
+                        }
+                    }
+                }
+                
+            default:
+                return
             }
         }
     }

@@ -12,6 +12,24 @@ import Logging
 
 fileprivate var logger = Logger(label: "SwiftifiedCommands")
 
+func updateMessage(_ client: DiscordClient, interaction: DiscordInteraction, content: String) async throws {
+    let url = URL(string: "https://discord.com/api/v10/webhooks/\(client.user!.id)/\(interaction.token)/messages/@original")!
+    var request = URLRequest(url: url)
+    request.httpMethod = "PATCH"
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+    
+    let body: [String: Any] = [
+        "content": content
+    ]
+    request.httpBody = try JSONSerialization.data(withJSONObject: body)
+    
+    let (data, response) = try await URLSession.shared.data(for: request)
+    
+    if let httpResponse = response as? HTTPURLResponse {
+        logger.info("Status: \(httpResponse.statusCode)")
+    }
+}
+
 func ping() async throws -> [Int] {
     guard let apiURL = URL(string: "https://discord.com/api/v10/gateway") else {
         logger.error("Invalid API URL.")
