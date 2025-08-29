@@ -7,21 +7,41 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		651A2FD42E59B125003C1742 /* SwiftyPing in Frameworks */ = {isa = PBXBuildFile; productRef = 651A2FD32E59B125003C1742 /* SwiftyPing */; };
+		655D62992E61E4D000EA702F /* Discord in Frameworks */ = {isa = PBXBuildFile; productRef = 655D62982E61E4D000EA702F /* Discord */; };
 		6566B73A2E5F4B3000F33A58 /* Discord in Frameworks */ = {isa = PBXBuildFile; productRef = 6566B7392E5F4B3000F33A58 /* Discord */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		654C08032E48B64700B4B8E4 /* Swiftified.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swiftified.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		655D62772E61E0C400EA702F /* Swiftified-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Swiftified-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		65430BFB2E49B31A00D5AE1F /* Exceptions for "Swiftified" folder in "Swiftified" target */ = {
+		655D62832E61E0F200EA702F /* Exceptions for "Swiftified" folder in "Swiftified-iOS" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Assets.xcassets,
+				Bot.swift,
+				BotManager.swift,
+				ContentView.swift,
+				Main.swift,
+				Networking.swift,
+				PrefixedCommands.swift,
+				Responses.swift,
+				Settings.swift,
+				SlashCommands.swift,
+				SpecialFunctions.swift,
+				SwiftifiedApp.swift,
+			);
+			target = 655D62762E61E0C400EA702F /* Swiftified-iOS */;
+		};
+		655D62962E61E49700EA702F /* Exceptions for "Swiftified-iOS" folder in "Swiftified-iOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Assets.xcassets,
 				Info.plist,
 			);
-			target = 654C08022E48B64700B4B8E4 /* Swiftified */;
+			target = 655D62762E61E0C400EA702F /* Swiftified-iOS */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -29,9 +49,17 @@
 		654C08052E48B64700B4B8E4 /* Swiftified */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				65430BFB2E49B31A00D5AE1F /* Exceptions for "Swiftified" folder in "Swiftified" target */,
+				655D62832E61E0F200EA702F /* Exceptions for "Swiftified" folder in "Swiftified-iOS" target */,
 			);
 			path = Swiftified;
+			sourceTree = "<group>";
+		};
+		655D62782E61E0C400EA702F /* Swiftified-iOS */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				655D62962E61E49700EA702F /* Exceptions for "Swiftified-iOS" folder in "Swiftified-iOS" target */,
+			);
+			path = "Swiftified-iOS";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -41,8 +69,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				651A2FD42E59B125003C1742 /* SwiftyPing in Frameworks */,
 				6566B73A2E5F4B3000F33A58 /* Discord in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		655D62742E61E0C400EA702F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				655D62992E61E4D000EA702F /* Discord in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,6 +88,8 @@
 			isa = PBXGroup;
 			children = (
 				654C08052E48B64700B4B8E4 /* Swiftified */,
+				655D62782E61E0C400EA702F /* Swiftified-iOS */,
+				655D62972E61E4D000EA702F /* Frameworks */,
 				654C08042E48B64700B4B8E4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -61,8 +98,16 @@
 			isa = PBXGroup;
 			children = (
 				654C08032E48B64700B4B8E4 /* Swiftified.app */,
+				655D62772E61E0C400EA702F /* Swiftified-iOS.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		655D62972E61E4D000EA702F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -85,11 +130,33 @@
 			);
 			name = Swiftified;
 			packageProductDependencies = (
-				651A2FD32E59B125003C1742 /* SwiftyPing */,
 				6566B7392E5F4B3000F33A58 /* Discord */,
 			);
 			productName = Swiftified;
 			productReference = 654C08032E48B64700B4B8E4 /* Swiftified.app */;
+			productType = "com.apple.product-type.application";
+		};
+		655D62762E61E0C400EA702F /* Swiftified-iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 655D627F2E61E0C600EA702F /* Build configuration list for PBXNativeTarget "Swiftified-iOS" */;
+			buildPhases = (
+				655D62732E61E0C400EA702F /* Sources */,
+				655D62742E61E0C400EA702F /* Frameworks */,
+				655D62752E61E0C400EA702F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				655D62782E61E0C400EA702F /* Swiftified-iOS */,
+			);
+			name = "Swiftified-iOS";
+			packageProductDependencies = (
+				655D62982E61E4D000EA702F /* Discord */,
+			);
+			productName = "Swiftified-iOS";
+			productReference = 655D62772E61E0C400EA702F /* Swiftified-iOS.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -105,6 +172,9 @@
 					654C08022E48B64700B4B8E4 = {
 						CreatedOnToolsVersion = 16.4;
 					};
+					655D62762E61E0C400EA702F = {
+						CreatedOnToolsVersion = 16.4;
+					};
 				};
 			};
 			buildConfigurationList = 654C07FE2E48B64700B4B8E4 /* Build configuration list for PBXProject "Swiftified" */;
@@ -117,7 +187,6 @@
 			mainGroup = 654C07FA2E48B64700B4B8E4;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				651A2FD22E59B125003C1742 /* XCRemoteSwiftPackageReference "SwiftyPing" */,
 				6566B7382E5F4B3000F33A58 /* XCRemoteSwiftPackageReference "swift-discord" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -126,6 +195,7 @@
 			projectRoot = "";
 			targets = (
 				654C08022E48B64700B4B8E4 /* Swiftified */,
+				655D62762E61E0C400EA702F /* Swiftified-iOS */,
 			);
 		};
 /* End PBXProject section */
@@ -138,10 +208,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		655D62752E61E0C400EA702F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		654C07FF2E48B64700B4B8E4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		655D62732E61E0C400EA702F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -278,26 +362,32 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Swiftified/Swiftified.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = ZW5JC2H6AQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Swiftified/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = Mineturtle2.Swiftified;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				REGISTER_APP_GROUPS = YES;
 				SUPPORTED_PLATFORMS = macosx;
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -311,29 +401,106 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Swiftified/Swiftified.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = ZW5JC2H6AQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Swiftified/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = Mineturtle2.Swiftified;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				REGISTER_APP_GROUPS = YES;
 				SUPPORTED_PLATFORMS = macosx;
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		655D62802E61E0C600EA702F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = ZW5JC2H6AQ;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.5;
+				PRODUCT_BUNDLE_IDENTIFIER = Mineturtle2.Swiftified;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		655D62812E61E0C600EA702F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = ZW5JC2H6AQ;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.5;
+				PRODUCT_BUNDLE_IDENTIFIER = Mineturtle2.Swiftified;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -358,17 +525,18 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		655D627F2E61E0C600EA702F /* Build configuration list for PBXNativeTarget "Swiftified-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				655D62802E61E0C600EA702F /* Debug */,
+				655D62812E61E0C600EA702F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		651A2FD22E59B125003C1742 /* XCRemoteSwiftPackageReference "SwiftyPing" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/samiyr/SwiftyPing.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		6566B7382E5F4B3000F33A58 /* XCRemoteSwiftPackageReference "swift-discord" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/MineTurtlee/swift-discord";
@@ -380,10 +548,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		651A2FD32E59B125003C1742 /* SwiftyPing */ = {
+		655D62982E61E4D000EA702F /* Discord */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 651A2FD22E59B125003C1742 /* XCRemoteSwiftPackageReference "SwiftyPing" */;
-			productName = SwiftyPing;
+			package = 6566B7382E5F4B3000F33A58 /* XCRemoteSwiftPackageReference "swift-discord" */;
+			productName = Discord;
 		};
 		6566B7392E5F4B3000F33A58 /* Discord */ = {
 			isa = XCSwiftPackageProductDependency;
