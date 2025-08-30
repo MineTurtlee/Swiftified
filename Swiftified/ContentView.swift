@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var manager = LocationKeepAlive()
     var body: some View {
         #if os(macOS)
             NavigationSplitView {
@@ -29,6 +30,14 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Swiftified")
+            .onAppear {
+                let state = manager.checkPermission()
+                switch state {
+                case "didntAsk": manager.requestPermission()
+                case "qrha": manager.requestPermission()
+                default: return
+                }
+            }
         #endif
     }
 }
