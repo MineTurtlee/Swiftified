@@ -38,5 +38,5 @@ jobs:
           xcodebuild build -scheme "Swiftified-iOS" -project "Swiftified.xcodeproj" CODE_SIGNING_ALLOWED='NO'
       - name: e
         run: |
-          cd /Users/runner/Library/Developer/Xcode/DerivedData/
+          cd /Users/runner/Library/Developer/Xcode/DerivedData/Swiftified-dyauannpldjxcmfmuecmkcaymqda/Build/Products
           ls
