@@ -23,7 +23,13 @@ struct Settings: View {
                 HStack {
                     Text("Bot Token")
                     TextField("Token here", text: $token)
+                    #if os(macOS)
                         .textFieldStyle(.roundedBorder)
+                        .multilineTextAlignment(.trailing)
+                    #elseif os(iOS)
+                        .textFieldStyle(.plain)
+                        .multilineTextAlignment(.trailing)
+                    #endif
                 }
             }
         }

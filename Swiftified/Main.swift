@@ -35,8 +35,14 @@ struct Main: View {
                 HStack {
                     Text("Prefix")
                     TextField("Prefix here", text: $prefix)
+                        .frame(width: 150)
+                    #if os(macOS)
                         .textFieldStyle(.roundedBorder)
-                        .frame(width: 150, alignment: .trailing)
+                        .multilineTextAlignment(.trailing)
+                    #elseif os(iOS)
+                        .textFieldStyle(.plain)
+                        .multilineTextAlignment(.trailing)
+                    #endif
                 }
                 Picker("Select a status", selection: $status) {
                     ForEach(statuslist, id: \.self) {
@@ -58,13 +64,15 @@ struct Main: View {
                         Text("Status Name")
                         TextField("Status name here...", text: $statusName)
                             .textFieldStyle(.roundedBorder)
-                            .frame(width: 300, alignment: .trailing)
+                            .frame(width: 300)
+                            .multilineTextAlignment(.trailing)
                     }
                     #elseif os(iOS)
-                    VStack {
-                        Text("Status name")
-                        TextField("", text: $statusName)
+                    HStack {
+                        Text("Status Name")
+                        TextField("Status Name", text: $statusName)
                             .textFieldStyle(.plain)
+                            .multilineTextAlignment(.trailing)
                     }
                     #endif
                 }
