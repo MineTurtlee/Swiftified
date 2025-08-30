@@ -44,9 +44,9 @@ jobs:
           cd Swiftified-iOS
           mkdir Payload
           echo "listing for swiftified-ios slash payload"
-          cd ..
           ls
-          mv Debug-iphoneos/Swiftified.app ./Swiftified-iOS/Payload
+          cd ..
+          mv Debug-iphoneos/Swiftified.app ./Swiftified-iOS/Payload/
           mkdir Swiftified
           ls
           mv Debug/Swiftified.app ./Swiftified/
