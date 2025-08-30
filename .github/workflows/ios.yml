@@ -59,8 +59,8 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: iOS
-          path: Swiftified-iOS
+          path: /Users/runner/Library/Developer/Xcode/DerivedData/Swiftified-dyauannpldjxcmfmuecmkcaymqda/Build/Products/Swiftified-iOS
       - uses: actions/upload-artifact@v4
         with:
           name: macOS
-          path: Swiftified
+          path: /Users/runner/Library/Developer/Xcode/DerivedData/Swiftified-dyauannpldjxcmfmuecmkcaymqda/Build/Products/Swiftified
