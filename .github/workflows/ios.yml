@@ -39,17 +39,23 @@ jobs:
       - name: e
         run: |
           cd /Users/runner/Library/Developer/Xcode/DerivedData/Swiftified-dyauannpldjxcmfmuecmkcaymqda/Build/Products
+
           ls
-          mkdir Swiftified-iOS
-          cd Swiftified-iOS
-          mkdir Payload
-          echo "listing for swiftified-ios slash payload"
-          ls
-          cd ..
+
+          mkdir -p Swiftified-iOS/Payload
+          mkdir -p Swiftified
+          
+          echo "listing for Swiftified-iOS/Payload"
+          ls Swiftified-iOS/Payload
+
           mv Debug-iphoneos/Swiftified.app ./Swiftified-iOS/Payload/
-          mkdir Swiftified
-          ls
+
           mv Debug/Swiftified.app ./Swiftified/
+
+          echo "Final contents:"
+          ls -R Swiftified-iOS
+          ls -R Swiftified
+
       - uses: actions/upload-artifact@v4
         with:
           name: iOS
