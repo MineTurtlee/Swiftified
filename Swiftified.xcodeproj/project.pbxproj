@@ -20,6 +20,7 @@
 		6536B0A82E62A140008AD5BC /* Exceptions for "Swiftified-iOS" folder in "Swiftified" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Location.swift,
 				LocationKeepAlive.swift,
 			);
 			target = 654C08022E48B64700B4B8E4 /* Swiftified */;
@@ -27,6 +28,7 @@
 		655D62832E61E0F200EA702F /* Exceptions for "Swiftified" folder in "Swiftified-iOS" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				AppDelegate.swift,
 				Assets.xcassets,
 				Bot.swift,
 				BotManager.swift,
@@ -50,12 +52,20 @@
 			);
 			target = 655D62762E61E0C400EA702F /* Swiftified-iOS */;
 		};
+		65BE93862E62EFAA00A887B5 /* Exceptions for "Swiftified" folder in "Swiftified" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 654C08022E48B64700B4B8E4 /* Swiftified */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		654C08052E48B64700B4B8E4 /* Swiftified */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				65BE93862E62EFAA00A887B5 /* Exceptions for "Swiftified" folder in "Swiftified" target */,
 				655D62832E61E0F200EA702F /* Exceptions for "Swiftified" folder in "Swiftified-iOS" target */,
 			);
 			path = Swiftified;
@@ -454,6 +464,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Swiftified-iOS/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -491,6 +502,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Swiftified-iOS/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

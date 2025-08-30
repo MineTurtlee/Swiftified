@@ -121,16 +121,38 @@ class Bot: DiscordClientDelegate {
     
     func client(_ client: DiscordClient, didCreateInteraction interaction: DiscordInteraction) {
         switch interaction.type {
-            case .applicationCommand:
-                // This is ONLY for `/slash` commands
-                slashHandler.invokeCommand(client, interaction: interaction)
-
-            case .messageComponent:
-                // Handle button presses here if you need
-                logger.info("Received a button/interaction, not a slash command")
-
-            default:
-                logger.debug("Unhandled interaction type: \(interaction.type!)")
-            }
+        case .applicationCommand:
+            // This is ONLY for `/slash` commands
+            slashHandler.invokeCommand(client, interaction: interaction)
+            
+        case .messageComponent:
+            // Handle button presses here if you need
+            logger.info("Received a button/interaction, not a slash command")
+            
+        default:
+            logger.debug("Unhandled interaction type: \(interaction.type!)")
+        }
     }
+    
+    #if os(iOS)
+    private var reconnectTask: DispatchWorkItem?
+
+    private func attemptReconnect() {
+        reconnectTask?.cancel()
+
+        let task = DispatchWorkItem { [weak self] in
+            guard let self = self else { return }
+            logger.info("Attempting reconnect...")
+            self.cliente.connect()
+        }
+
+        reconnectTask = task
+        DispatchQueue.global().asyncAfter(deadline: .now() + 5, execute: task)
+    }
+    
+    func client(_ client: DiscordClient, didDisconnectWithReason reason: String?) {
+        logger.warning("Disconnected: \(reason ?? "no reason")")
+        attemptReconnect()
+    }
+    #endif
 }

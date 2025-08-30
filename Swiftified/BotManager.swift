@@ -11,33 +11,44 @@ import Logging
 fileprivate var logger = Logger(label: "SwiftifiedBotManager")
 
 class BotManager: ObservableObject {
+    static let shared = BotManager()
     private var bot: Bot?
     @ObservedObject private var tmp = TempVars.shared
     #if os(iOS)
-        private var managerrr = LocationKeepAlive()
+    @Published private var managerrr = LocationKeepAlive.shared
     #endif
+    
+    private init() {}
     
     func startBot() {
         logger.info("Called bot start")
         DispatchQueue.global(qos: .background).async {
             let newBot = Bot()
+            #if os(iOS)
+            self.managerrr.start()
+            #endif
             newBot.start()
             DispatchQueue.main.async {
                 self.bot = newBot
-                #if os(iOS)
-                self.managerrr.start()
-                #endif
             }
         }
     }
 
     func stopBot() {
         logger.info("Called bot stop")
+        #if os(iOS)
+        self.managerrr.stop()
+        #endif
         bot?.sybau()
         bot = nil
-        #if os(iOS)
-            self.managerrr.stop()
-        #endif
+    }
+    
+    func reboot() {
+        logger.info("Rebooting bot")
+        stopBot()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.startBot()
+        }
     }
 }
 

@@ -12,33 +12,26 @@ import Foundation
 
 fileprivate var logger = Logger(label: "LocationKeepAlive")
 
-class LocationKeepAlive: NSObject, CLLocationManagerDelegate {
+class LocationKeepAlive: NSObject, ObservableObject, CLLocationManagerDelegate {
+    static let shared: LocationKeepAlive = LocationKeepAlive()
     private let manager = CLLocationManager()
+    lazy var variabeeee: String = ""
     
     override init() {
         super.init()
         manager.delegate = self
     }
     
-    func checkPermission() -> String {
-        lazy var status: String = ""
-        switch manager.authorizationStatus {
-        case .notDetermined:
-            status = "didntAsk"
-        case .restricted:
-            status = "restricted"
-        case .denied:
-            status = "denied"
-        case .authorizedWhenInUse:
-            status = "onlyInUse"
-        case .authorizedAlways:
-            status = "alwaysAuthorized"
-        @unknown default:
-            status = "qrha"
+    func checkPermission() -> CLAuthorizationStatus {
+        var authorizationStatus: CLAuthorizationStatus {
+            if #available(iOS 14.0, *) {
+                return manager.authorizationStatus
+            } else {
+                return CLLocationManager.authorizationStatus()
+            }
         }
-        
-        logger.info("\(status)")
-        return status
+
+        return authorizationStatus
     }
     
     func requestPermission() {
@@ -53,15 +46,16 @@ class LocationKeepAlive: NSObject, CLLocationManagerDelegate {
         
         // This keeps firing updates → app stays alive
         manager.startUpdatingLocation()
+        
+        manager.startMonitoringSignificantLocationChanges()
     }
     
     func stop() {
         manager.stopUpdatingLocation()
     }
     
-    // MARK: CLLocationManagerDelegate
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("Location updated: \(locations.last?.coordinate ?? CLLocationCoordinate2D())")
-        // You don’t actually need the location → just keeping alive
+        logger.info("Location updated @ \(Date())")
+        variabeeee = "\(locations.last?.coordinate ?? CLLocationCoordinate2D())"
     }
 }

@@ -19,7 +19,7 @@ final class TempVars: ObservableObject {
 }
 
 struct Main: View {
-    @StateObject private var manager = BotManager()
+    @StateObject private var manager = BotManager.shared
     private var bot = Bot.shared
     @ObservedObject private var tmp = TempVars.shared
     @AppStorage("statusMode") public var selection = "Nothing"
@@ -53,12 +53,20 @@ struct Main: View {
                 if selection == "Nothing" {
                 }
                 else {
+                    #if os(macOS)
                     HStack {
                         Text("Status Name")
                         TextField("Status name here...", text: $statusName)
                             .textFieldStyle(.roundedBorder)
                             .frame(width: 300, alignment: .trailing)
                     }
+                    #elseif os(iOS)
+                    VStack {
+                        Text("Status name")
+                        TextField("", text: $statusName)
+                            .textFieldStyle(.plain)
+                    }
+                    #endif
                 }
                 HStack {
                 Text("Start, or stop the bot!")
@@ -80,12 +88,7 @@ struct Main: View {
                 HStack {
                     Text("Restart the bot (use when refreshing presence)")
                     Button("Restart") {
-                        manager.stopBot()
-                        TempVars.shared.hasStarted.toggle()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                            manager.startBot()
-                            TempVars.shared.hasStarted.toggle()
-                        }
+                        manager.reboot()
                     }
                     .frame(alignment: .trailing)
                     .disabled(TempVars.shared.disabled)

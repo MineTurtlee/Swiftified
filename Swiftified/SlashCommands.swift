@@ -34,13 +34,13 @@ fileprivate let logger = Logger(label: "SlashCommands")
 } */
 
 class SlashCommands {
-    @StateObject var manager = BotManager()
+    @StateObject var manager = BotManager.shared
     @ObservedObject var tmp = TempVars.shared
     @AppStorage("prefix") var prefix: String = "!"
-    func createCallback(_ command: DiscordApplicationCommand, response: HTTPURLResponse) {
-        if let cmd = Optional(command) {
+    func createCallback(_ command: DiscordApplicationCommand?, response: HTTPURLResponse?) {
+        if let cmd = command {
             logger.info("Successfully created command: \(cmd.name)")
-        } else if let resp = Optional(response) {
+        } else if let resp = response {
             logger.warning("Failed to create command. Status: \(resp.statusCode)")
         } else {
             logger.error("Unknown error while creating command.")
@@ -54,26 +54,26 @@ class SlashCommands {
                 description: "Test command for turtle to test wink wink",
                 options: nil
             ) { command, response in
-                self.createCallback(command!, response: response!)
+                self.createCallback(command, response: response)
             }
             client.createApplicationCommand(
                 name: "help",
                 description: "Help for Swiftified (well uh you know what, this thing is bad)",
                 options: nil
             ) { command, response in
-                self.createCallback(command!, response: response!)
+                self.createCallback(command, response: response)
             }
             client.createApplicationCommand(
                 name: "ping",
                 description: "Ping pong",
                 options: nil
             ) { command, response in
-                self.createCallback(command!, response: response!)
+                self.createCallback(command, response: response)
             }
             client.createApplicationCommand(
                 name: "sybau",
                 description: "Turn off the bot [Owner-only]", options: nil) { command, response in
-                    self.createCallback(command!, response: response!)
+                    self.createCallback(command, response: response)
                 }
             client.createApplicationCommand(
                 name: "echo",
@@ -87,7 +87,7 @@ class SlashCommands {
                     )
                 ]
             ) { command, response in
-                    self.createCallback(command!, response: response!)
+                    self.createCallback(command, response: response)
             }
             client.createApplicationCommand(
                 name: "ban",
@@ -95,7 +95,7 @@ class SlashCommands {
                 options: [DiscordApplicationCommandOption(type: .user, name: "user", description: "User to ban", isRequired: true),
                           DiscordApplicationCommandOption(type: .string, name: "reason", description: "Reason to ban")]
             ) { command, response in
-                self.createCallback(command!, response: response!)
+                self.createCallback(command, response: response)
             }
         }
         else {
