@@ -39,6 +39,7 @@ jobs:
       - name: e
         run: |
           cd /Users/runner/Library/Developer/Xcode/DerivedData/Swiftified-dyauannpldjxcmfmuecmkcaymqda/Build/Products
+          ls
           mkdir Swiftified-iOS
           cd Swiftified-iOS && mkdir Payload
           cd ..
