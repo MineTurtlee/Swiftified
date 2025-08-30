@@ -48,7 +48,7 @@ jobs:
           echo "listing for Swiftified-iOS/Payload"
           ls Swiftified-iOS/Payload
 
-          mv Debug-iphoneos/Swiftified.app ./Swiftified-iOS/Payload/
+          mv Debug-iphoneos/Swiftified-iOS.app ./Swiftified-iOS/Payload/
 
           mv Debug/Swiftified.app ./Swiftified/
 
