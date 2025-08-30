@@ -35,4 +35,4 @@ jobs:
           xcodebuild build -scheme "$scheme" -"$filetype_parameter" "$file_to_build"
       - name: Build (iOS)
         run: |
-          xcodebuild build -scheme "Swiftified-iOS" -project "$(ls *.xcodeproj)"
+          xcodebuild build -scheme "Swiftified-iOS" 
