@@ -35,7 +35,7 @@ jobs:
           xcodebuild build -scheme "$scheme" -"$filetype_parameter" "$file_to_build"
       - name: Build (iOS)
         run: |
-          xcodebuild build -scheme "Swiftified-iOS" -project "Swiftified.xcodeproj" CODE_SIGNING_ALLOWED='NO'
+          xcodebuild build -scheme "Swiftified-iOS" -project "Swiftified.xcodeproj" CODE_SIGNING_ALLOWED='NO' -sdk iphoneos
       - name: e
         run: |
           cd /Users/runner/Library/Developer/Xcode/DerivedData/Swiftified-dyauannpldjxcmfmuecmkcaymqda/Build/Products
