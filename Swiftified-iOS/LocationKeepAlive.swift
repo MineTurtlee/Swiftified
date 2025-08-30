@@ -16,8 +16,7 @@ class LocationKeepAlive: NSObject, ObservableObject, CLLocationManagerDelegate {
     static let shared: LocationKeepAlive = LocationKeepAlive()
     private let manager = CLLocationManager()
     lazy var variabeeee: String = ""
-    
-    override init() {
+    private override init() {
         super.init()
         manager.delegate = self
     }

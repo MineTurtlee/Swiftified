@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     #if os(iOS)
-    @StateObject private var manager = LocationKeepAlive()
+    @StateObject private var manager = LocationKeepAlive.shared
     #endif
     var body: some View {
         #if os(macOS)
