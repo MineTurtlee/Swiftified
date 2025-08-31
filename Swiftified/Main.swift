@@ -46,9 +46,7 @@ struct Main: View {
                 }
                 .frame(width: 300, alignment: .trailing)
                 .multilineTextAlignment(.trailing)
-                if selection == "Nothing" {
-                }
-                else {
+                if selection != "Nothing" {
                     #if os(macOS)
                     HStack {
                         Text("Status Name")

@@ -48,7 +48,7 @@ class SlashCommands {
     }
     
     init(_ client: DiscordClient, initTree: Bool = false) {
-        if initTree == true {
+        if (initTree == true && client.user!.bot == true) {
             client.createApplicationCommand(
                 name: "test",
                 description: "Test command for turtle to test wink wink",
