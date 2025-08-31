@@ -12,7 +12,7 @@ import SwiftUI
 fileprivate let logger = Logger(label: "PrefixedCommands")
 
 class PrefixedCommands {
-    @StateObject var manager = BotManager.shared
+    @ObservedObject var manager = BotManager.shared
     @ObservedObject var tmp = TempVars.shared
     @AppStorage("prefix") var prefix: String = ""
     init() {}

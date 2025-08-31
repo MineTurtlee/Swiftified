@@ -34,7 +34,7 @@ fileprivate let logger = Logger(label: "SlashCommands")
 } */
 
 class SlashCommands {
-    @StateObject var manager = BotManager.shared
+    @ObservedObject var manager = BotManager.shared
     @ObservedObject var tmp = TempVars.shared
     @AppStorage("prefix") var prefix: String = "!"
     func createCallback(_ command: DiscordApplicationCommand?, response: HTTPURLResponse?) {

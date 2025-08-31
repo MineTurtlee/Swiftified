@@ -19,7 +19,7 @@ final class TempVars: ObservableObject {
 }
 
 struct Main: View {
-    @StateObject private var manager = BotManager.shared
+    @ObservedObject private var manager = BotManager.shared
     private var bot = Bot.shared
     @ObservedObject private var tmp = TempVars.shared
     @AppStorage("statusMode") public var selection = "Nothing"
@@ -35,7 +35,6 @@ struct Main: View {
                 HStack {
                     Text("Prefix")
                     TextField("Prefix here", text: $prefix)
-                        .frame(width: 150)
                     #if os(macOS)
                         .textFieldStyle(.roundedBorder)
                         .multilineTextAlignment(.trailing)
@@ -64,7 +63,6 @@ struct Main: View {
                         Text("Status Name")
                         TextField("Status name here...", text: $statusName)
                             .textFieldStyle(.roundedBorder)
-                            .frame(width: 300)
                             .multilineTextAlignment(.trailing)
                     }
                     #elseif os(iOS)

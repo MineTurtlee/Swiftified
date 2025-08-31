@@ -10,7 +10,9 @@ import SwiftUI
 struct Location: View {
     @ObservedObject private var LocationKAL = LocationKeepAlive.shared
     var body: some View {
-        Text("Location: \(LocationKAL.variabeeee)")
+        @State var lat = LocationKAL.variabeeee.latitude
+        @State var long = LocationKAL.variabeeee.longitude
+        Text("Location: \(lat), \(long)")
     }
 }
 

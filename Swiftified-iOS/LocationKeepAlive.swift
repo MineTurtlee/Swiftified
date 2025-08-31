@@ -15,7 +15,7 @@ fileprivate var logger = Logger(label: "LocationKeepAlive")
 class LocationKeepAlive: NSObject, ObservableObject, CLLocationManagerDelegate {
     static let shared: LocationKeepAlive = LocationKeepAlive()
     private let manager = CLLocationManager()
-    lazy var variabeeee: String = ""
+    lazy var variabeeee: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     private override init() {
         super.init()
         manager.delegate = self
@@ -39,14 +39,12 @@ class LocationKeepAlive: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func start() {
-        manager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
+        manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.allowsBackgroundLocationUpdates = true
         manager.pausesLocationUpdatesAutomatically = false
         
-        // This keeps firing updates → app stays alive
+        // Time to (not!) dox users (LMAO..)
         manager.startUpdatingLocation()
-        
-        manager.startMonitoringSignificantLocationChanges()
     }
     
     func stop() {
@@ -55,6 +53,6 @@ class LocationKeepAlive: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         logger.info("Location updated @ \(Date())")
-        variabeeee = "\(locations.last?.coordinate ?? CLLocationCoordinate2D())"
+        variabeeee = locations.last?.coordinate ?? CLLocationCoordinate2D()
     }
 }

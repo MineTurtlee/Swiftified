@@ -15,7 +15,7 @@ class BotManager: ObservableObject {
     private var bot: Bot?
     @ObservedObject private var tmp = TempVars.shared
     #if os(iOS)
-    @StateObject private var located = LocationKeepAlive.shared
+    @ObservedObject private var located = LocationKeepAlive.shared
     #endif
     
     private init() {}
@@ -46,9 +46,11 @@ class BotManager: ObservableObject {
     func reboot() {
         logger.info("Rebooting bot")
         stopBot()
+        tmp.hasStarted = false
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.startBot()
         }
+        tmp.hasStarted = true
     }
 }
 
