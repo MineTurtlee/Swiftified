@@ -9,15 +9,35 @@ import SwiftUI
 
 @main
 struct SwiftifiedApp: App {
+    @ObservedObject var manager = BotManager.shared
+    @ObservedObject var tmp = TempVars.shared
+    @AppStorage("autoStart") var autoStart: Bool = false
+    @State var showPopup = false
     #if os(iOS)
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     #endif
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onAppear {
+                    showPopup = true
+                }
+                .alert(isPresented: $showPopup) {
+                    let alr = Alert(
+                        title: Text("Bot Auto Started"),
+                        message: Text("Configure auto start behavior by heading into Settings page!"),
+                        dismissButton: .default(Text("Okie dokie!"), action: {
+                            tmp.hasStarted = true
+                            manager.startBot()
+                        })
+                    )
+                    return alr
+                }
         }
     }
 }
+
 
 
 /*

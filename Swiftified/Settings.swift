@@ -11,25 +11,34 @@ struct Settings: View {
     let typelist = ["Bot", "User"]
     @AppStorage("token") var token: String = ""
     @AppStorage("tokenType") var tokenType: String = "Bot"
+    @AppStorage("autoStart") var autoStart: Bool = false
     var body: some View {
         NavigationStack {
             List {
-                Picker("Token type", selection: $tokenType) {
-                    ForEach(typelist, id: \.self) {
-                        Text($0)
+                Section(header: Text("Bot")) {
+                    Picker("Token type", selection: $tokenType) {
+                        ForEach(typelist, id: \.self) {
+                            Text($0)
+                        }
+                    }
+                    .frame(width: 150)
+                    HStack {
+                        Text("Bot Token")
+                        TextField("Token here", text: $token)
+#if os(macOS)
+                            .textFieldStyle(.roundedBorder)
+                            .multilineTextAlignment(.trailing)
+#elseif os(iOS)
+                            .textFieldStyle(.plain)
+                            .multilineTextAlignment(.trailing)
+#endif
                     }
                 }
-                .frame(width: 150)
-                HStack {
-                    Text("Bot Token")
-                    TextField("Token here", text: $token)
-                    #if os(macOS)
-                        .textFieldStyle(.roundedBorder)
-                        .multilineTextAlignment(.trailing)
-                    #elseif os(iOS)
-                        .textFieldStyle(.plain)
-                        .multilineTextAlignment(.trailing)
-                    #endif
+                Section(header: Text("App")) {
+                    Toggle(
+                        "Start bot on app start",
+                        isOn: $autoStart
+                    )
                 }
             }
         }

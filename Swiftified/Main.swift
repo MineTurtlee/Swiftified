@@ -7,17 +7,6 @@
 
 import SwiftUI
 
-final class TempVars: ObservableObject {
-    static let shared = TempVars()
-    @Published var hasStarted: Bool = false {
-        didSet {
-            disabled = !hasStarted
-        }
-    }
-    @Published var disabled: Bool = true
-    private init() {}
-}
-
 struct Main: View {
     @ObservedObject private var manager = BotManager.shared
     private var bot = Bot.shared
@@ -49,12 +38,14 @@ struct Main: View {
                     }
                 }
                 .frame(width: 250, alignment: .trailing)
+                .multilineTextAlignment(.trailing)
                 Picker("Select a status mode", selection: $selection) {
                     ForEach(statuses, id: \.self) {
                         Text($0)
                     }
                 }
                 .frame(width: 300, alignment: .trailing)
+                .multilineTextAlignment(.trailing)
                 if selection == "Nothing" {
                 }
                 else {

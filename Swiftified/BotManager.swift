@@ -25,6 +25,7 @@ class BotManager: ObservableObject {
         DispatchQueue.global(qos: .background).async {
             let newBot = Bot()
             newBot.start()
+            self.tmp.hasStarted = true
             DispatchQueue.main.async {
                 #if os(iOS)
                 self.located.start()
@@ -41,16 +42,15 @@ class BotManager: ObservableObject {
         #endif
         bot?.sybau()
         bot = nil
+        self.tmp.hasStarted = false
     }
     
     func reboot() {
         logger.info("Rebooting bot")
         stopBot()
-        tmp.hasStarted = false
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.startBot()
         }
-        tmp.hasStarted = true
     }
 }
 
