@@ -206,6 +206,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				6566B7382E5F4B3000F33A58 /* XCRemoteSwiftPackageReference "swift-discord" */,
+				65FAAC3D2E70724900E4BE4D /* XCLocalSwiftPackageReference "Swiftified-CLI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 654C08042E48B64700B4B8E4 /* Products */;
@@ -561,6 +562,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		65FAAC3D2E70724900E4BE4D /* XCLocalSwiftPackageReference "Swiftified-CLI" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "Swiftified-CLI";
+		};
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
 		6566B7382E5F4B3000F33A58 /* XCRemoteSwiftPackageReference "swift-discord" */ = {
