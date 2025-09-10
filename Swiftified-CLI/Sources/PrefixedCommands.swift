@@ -12,9 +12,10 @@ import SwiftUI
 fileprivate let logger = Logger(label: "PrefixedCommands")
 
 class PrefixedCommands {
-    @ObservedObject var manager = BotManager.shared
+    var manager = BotManager.shared
     init() {}
-    func invokeCommand(command: String, client: DiscordClient, ctx: ChannelID, message: DiscordMessage) {
+    @MainActor
+    func invokeCommand(command: String, client: DiscordClient, ctx: ChannelID, message: DiscordMessage, prefix: String) {
         let author = message.author
         let components = command.split(separator: " ", omittingEmptySubsequences: true)
         let cmd = String(components.first ?? "")
@@ -131,8 +132,8 @@ class PrefixedCommands {
                 client.sendMessage(DiscordMessage(content: "Shutting down... in <t:\(Int(time) + 10):R>"), to: ctx)
                 logger.warning("Shutting down in 10")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
-                    client.disconnect()
-                    TempVars.shared.hasStarted.toggle()
+                    BotManager.shared.stopBot()
+                    exit(0)
                 }
             }
             else {
@@ -140,7 +141,7 @@ class PrefixedCommands {
                 client.sendMessage(DiscordMessage(content: noprms), to: ctx)
             }
         case "ping":
-            Task {
+            Task { @MainActor in
                 do {
                     let latencies = try await ping()
                     let apiLatency = latencies.first ?? -1
@@ -148,7 +149,7 @@ class PrefixedCommands {
                     
                     client.sendMessage(
                         DiscordMessage(
-                            stringLiteral: "Pong!\nAPI latency: \(apiLatency)ms\nWebSocket latency: \(wsLatency)ms\nAverage: \((max(apiLatency, wsLatency) - min(apiLatency, wsLatency)) / 2)ms"
+                            stringLiteral: "Pong!\nAPI latency: \(apiLatency)ms\nWebSocket latency: \(wsLatency)ms\nAverage: \((apiLatency + wsLatency) / 2)ms"
                         ),
                         to: ctx
                     )

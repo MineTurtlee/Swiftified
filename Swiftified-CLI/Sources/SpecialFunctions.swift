@@ -10,7 +10,7 @@ import Discord
 import Foundation
 import Logging
 
-fileprivate var logger = Logger(label: "SwiftifiedCommands")
+fileprivate let logger = Logger(label: "SwiftifiedCommands")
 
 func updateMessage(_ client: DiscordClient, interaction: DiscordInteraction, content: String) async throws {
     let url = URL(string: "https://discord.com/api/v10/webhooks/\(client.user!.id)/\(interaction.token)/messages/@original")!

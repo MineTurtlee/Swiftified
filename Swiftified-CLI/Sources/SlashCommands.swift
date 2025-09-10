@@ -33,17 +33,18 @@ fileprivate let logger = Logger(label: "SlashCommands")
  print(String(data: data, encoding: .utf8) ?? "")
 } */
 
-class SlashCommands {
-    @ObservedObject var manager = BotManager.shared
-    func createCallback(_ command: DiscordApplicationCommand?, response: HTTPURLResponse?) {
-        if let cmd = command {
-            logger.info("Successfully created command: \(cmd.name)")
-        } else if let resp = response {
-            logger.warning("Failed to create command. Status: \(resp.statusCode)")
-        } else {
-            logger.error("Unknown error while creating command.")
-        }
+func createCallback(_ command: DiscordApplicationCommand?, response: HTTPURLResponse?) {
+    if let cmd = command {
+        logger.info("Successfully created command: \(cmd.name)")
+    } else if let resp = response {
+        logger.warning("Failed to create command. Status: \(resp.statusCode)")
+    } else {
+        logger.error("Unknown error while creating command.")
     }
+}
+
+class SlashCommands {
+    var manager = BotManager.shared
     
     init(_ client: DiscordClient, initTree: Bool = false) {
         if (initTree == true && client.user!.bot == true) {
@@ -52,26 +53,26 @@ class SlashCommands {
                 description: "Test command for turtle to test wink wink",
                 options: nil
             ) { command, response in
-                self.createCallback(command, response: response)
+                createCallback(command, response: response)
             }
             client.createApplicationCommand(
                 name: "help",
                 description: "Help for Swiftified (well uh you know what, this thing is bad)",
                 options: nil
             ) { command, response in
-                self.createCallback(command, response: response)
+                createCallback(command, response: response)
             }
             client.createApplicationCommand(
                 name: "ping",
                 description: "Ping pong",
                 options: nil
             ) { command, response in
-                self.createCallback(command, response: response)
+                createCallback(command, response: response)
             }
             client.createApplicationCommand(
                 name: "sybau",
                 description: "Turn off the bot [Owner-only]", options: nil) { command, response in
-                    self.createCallback(command, response: response)
+                    createCallback(command, response: response)
                 }
             client.createApplicationCommand(
                 name: "echo",
@@ -85,7 +86,7 @@ class SlashCommands {
                     )
                 ]
             ) { command, response in
-                    self.createCallback(command, response: response)
+                    createCallback(command, response: response)
             }
             client.createApplicationCommand(
                 name: "ban",
@@ -93,14 +94,15 @@ class SlashCommands {
                 options: [DiscordApplicationCommandOption(type: .user, name: "user", description: "User to ban", isRequired: true),
                           DiscordApplicationCommandOption(type: .string, name: "reason", description: "Reason to ban")]
             ) { command, response in
-                self.createCallback(command, response: response)
+                createCallback(command, response: response)
             }
         }
         else {
         }
     }
-                
-        func invokeCommand(_ client: DiscordClient, interaction: DiscordInteraction) {
+               
+    @MainActor
+    func invokeCommand(_ client: DiscordClient, interaction: DiscordInteraction, prefix: String) {
             let command = interaction.data?.name!
             let prefix = prefix
             let id = interaction.id
@@ -204,8 +206,8 @@ class SlashCommands {
                     client.createInteractionResponse(for: interaction.id, token: interaction.token, response: DiscordInteractionResponse(type: .channelMessageWithSource, data: DiscordInteractionApplicationCommandCallbackData(content: "Shutting down in <t:\(time + 10):R>")))
                     logger.warning("Shutting down in 10")
                     DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
-                        client.disconnect()
-                        TempVars.shared.hasStarted.toggle()
+                        BotManager.shared.stopBot()
+                        exit(0)
                     }
                 }
                 else {
@@ -229,7 +231,7 @@ class SlashCommands {
                         let author = interaction.member
                         let parsedGuild = parseGuild(guildId: guild, client: client)
                         if parsedGuild.canMember(author!, DiscordPermissions(arrayLiteral: .kickMembers), in: interaction.channelId) {
-                            Task {
+                            Task { @MainActor in
                                 try? await updateMessage(client, interaction: interaction, content: "Still in progress, plz wait!")
                             }
                         }

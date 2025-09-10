@@ -8,7 +8,7 @@
 import Discord
 import Logging
 
-fileprivate var logger = Logger(label: "SwiftifiedResponses")
+fileprivate let logger = Logger(label: "SwiftifiedResponses")
 
 class Responses {
     init(client: DiscordClient, message: DiscordMessage) {

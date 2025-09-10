@@ -1,15 +1,15 @@
 import Foundation
 import Logging
 
-fileprivate var logger = Logger(label: "Swiftified")
-
 struct DataCodable: Codable {
     let token: String
     let tokenType: String
     let prefix: String
 }
 
-struct MyTool {
+@main
+struct Swiftified {
+    static fileprivate let logger = Logger(label: "Swiftified")
     @MainActor static func main() {
         let args = CommandLine.arguments
 
@@ -24,9 +24,10 @@ struct MyTool {
         do {
             let data = try Data(contentsOf: url)
             let config = try JSONDecoder().decode(DataCodable.self, from: data)
-            
+            BotManager.shared.startBot(config.token, config.tokenType, config.prefix)
         } catch {
-            print("Error: \(error)")
+            logger.error("\(error)")
         }
     }
 }
+
