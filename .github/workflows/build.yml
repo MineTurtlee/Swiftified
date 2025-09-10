@@ -82,5 +82,6 @@ jobs:
           swift build
       - name: Debug
         run: |
+          cd ${{ GITHUB.WORKSPACE }}/Swiftified-CLI
           cd .build
           ls
