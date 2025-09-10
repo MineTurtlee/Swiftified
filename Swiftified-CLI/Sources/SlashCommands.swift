@@ -4,7 +4,6 @@
 //
 //  Created by GreenyCells (Mineturtlee) on 25/8/25.
 //
-import SwiftUI
 import Discord
 import Logging
 import Foundation

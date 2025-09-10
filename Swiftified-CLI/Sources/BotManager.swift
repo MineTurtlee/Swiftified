@@ -5,12 +5,12 @@
 //  Created by GreenyCells (Mineturtlee) on 11/8/25.
 //
 
-import SwiftUI
+import Foundation
 import Logging
 
 fileprivate let logger = Logger(label: "SwiftifiedBotManager")
 
-class BotManager: ObservableObject, @unchecked Sendable {
+class BotManager: @unchecked Sendable {
     static let shared = BotManager()
     lazy var token1: String = ""
     lazy var tokenType1: String = ""

@@ -7,7 +7,6 @@
 
 import Discord
 import Dispatch
-import SwiftUI
 import Logging
 
 fileprivate let logger = Logger(label: "SwiftifiedBot")

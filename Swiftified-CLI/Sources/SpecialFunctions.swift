@@ -5,7 +5,6 @@
 //  Created by GreenyCells (Mineturtlee) on 15/8/25.
 //
 
-import SwiftUI
 import Discord
 import Foundation
 import Logging

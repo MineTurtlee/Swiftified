@@ -7,7 +7,6 @@
 import Foundation
 import Discord
 import Logging
-import SwiftUI
 
 fileprivate let logger = Logger(label: "PrefixedCommands")
 
