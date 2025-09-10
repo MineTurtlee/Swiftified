@@ -7,6 +7,9 @@
 import Foundation
 import Discord
 import Logging
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 fileprivate let logger = Logger(label: "PrefixedCommands")
 

@@ -7,6 +7,9 @@
 import Discord
 import Logging
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 fileprivate let logger = Logger(label: "SlashCommands")
 

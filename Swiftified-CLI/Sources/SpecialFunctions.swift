@@ -8,6 +8,9 @@
 import Discord
 import Foundation
 import Logging
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 fileprivate let logger = Logger(label: "SwiftifiedCommands")
 
