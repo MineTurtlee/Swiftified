@@ -71,9 +71,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: swift-actions/setup-swift@v2
       - name: Build
         run: |
+          swift --version
           cd ${{ GITHUB.WORKSPACE }}
           cd Swiftified-CLI
           swift build
