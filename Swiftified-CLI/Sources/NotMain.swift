@@ -25,6 +25,7 @@ struct Swiftified {
             let data = try Data(contentsOf: url)
             let config = try JSONDecoder().decode(DataCodable.self, from: data)
             BotManager.shared.startBot(config.token, config.tokenType, config.prefix)
+            RunLoop.main.run()
         } catch {
             logger.error("\(error)")
         }
