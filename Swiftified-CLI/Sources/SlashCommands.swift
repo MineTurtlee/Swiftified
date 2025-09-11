@@ -189,7 +189,7 @@ class SlashCommands {
                         try await updateMessage(
                             client,
                             interaction: interaction,
-                            content: "Pong!\nAPI latency: \(apiLatency)ms\nWebSocket latency: \(wsLatency)ms\nAverage: \((max(apiLatency, wsLatency) - min(apiLatency, wsLatency)) / 2)ms"
+                            content: "Pong!\nAPI latency: \(apiLatency)ms\nWebSocket latency: \(wsLatency)ms\nAverage: \((apiLatency + wsLatency) / 2)ms"
                         )
                     } catch {
                         logger.error("Ping failed: \(error.localizedDescription)")
