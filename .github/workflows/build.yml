@@ -101,12 +101,12 @@ jobs:
       - name: Build
         run: |
           cd ${{ GITHUB.WORKSPACE }}/Swiftified-CLI
-          swift build
+          swift build --arch arm64 --arch x86_64
       - name: Listing for builds
         run: |
           cd ${{ GITHUB.WORKSPACE }}/Swiftified-CLI/.build
           ls
       - uses: actions/upload-artifact@v4
         with:
-          name: macOS
-          path: ${{ GITHUB.WORKSPACE }}/Swiftified-CLI/.build
+          name: macOS CLI (fat)
+          path: ${{ GITHUB.WORKSPACE }}/Swiftified-CLI/.build/arm64-apple-macosx/Swiftified
