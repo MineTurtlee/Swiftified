@@ -36,7 +36,7 @@ class Bot: @preconcurrency DiscordClientDelegate, @unchecked Sendable {
         cliente.connect()
         let botlink = cliente.getBotURL(with: DiscordPermissions(590980454018134))
         do {
-            logger.info("Bot started as \((cliente.user)!.username!) (\((cliente.user)!.id)) • Is Bot: \((cliente.user)!.bot!)")
+            try? logger.info("Bot started as \((cliente.user)!.username!) (\((cliente.user)!.id)) • Is Bot: \((cliente.user)!.bot!)")
         }
         catch {
                 
