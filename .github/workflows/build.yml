@@ -68,6 +68,8 @@ jobs:
   linux:
     name: Build (Linux)
     runs-on: ubuntu-20.04
+    container:
+      image: swift:6.0-focal
 
     steps:
       - uses: actions/checkout@v4
