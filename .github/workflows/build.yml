@@ -79,7 +79,7 @@ jobs:
           swift --version
           cd ${{ GITHUB.WORKSPACE }}
           cd Swiftified-CLI
-          swift build
+          swift build -Xswiftc -static-stdlib
       - name: Debug
         run: |
           cd ${{ GITHUB.WORKSPACE }}/Swiftified-CLI
@@ -101,7 +101,7 @@ jobs:
       - name: Build
         run: |
           cd ${{ GITHUB.WORKSPACE }}/Swiftified-CLI
-          swift build --arch arm64 --arch x86_64 -Xswiftc -static-stdlib
+          swift build --arch arm64 --arch x86_64
       - uses: actions/upload-artifact@v4
         with:
           name: macOS CLI (fat)
