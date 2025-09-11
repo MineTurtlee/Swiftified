@@ -98,14 +98,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: switch
-        run: |
-          ls /Applications
-          sudo xcode-select -s /Applications/Xcode_16.4.app
       - name: Build
         run: |
           cd ${{ GITHUB.WORKSPACE }}/Swiftified-CLI
           swift build
+      - name: Listing for builds
+        run: |
+          cd ${{ GITHUB.WORKSPACE }}/Swiftified-CLI/.build
+          ls
       - uses: actions/upload-artifact@v4
         with:
           name: macOS
