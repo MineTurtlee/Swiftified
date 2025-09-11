@@ -8,6 +8,7 @@
 import Discord
 import Dispatch
 import Logging
+import Foundation
 
 fileprivate let logger = Logger(label: "SwiftifiedBot")
 
@@ -34,14 +35,21 @@ class Bot: @preconcurrency DiscordClientDelegate, @unchecked Sendable {
         )
         prefix = prefix1
         cliente.connect()
-        let botlink = cliente.getBotURL(with: DiscordPermissions(590980454018134))
+        wow(cliente)
+    }
+    
+    func wow(_ client: DiscordClient) {
+        while client.connected != true {
+            Thread.sleep(forTimeInterval: 0.1)
+        }
         do {
             try? logger.info("Bot started as \((cliente.user)!.username!) (\((cliente.user)!.id)) • Is Bot: \((cliente.user)!.bot!)")
         }
         catch {
-                
+            logger.error("Error while trying to list initial information.")
         }
         if (((cliente.user)!.bot!) == true) {
+            let botlink = client.getBotURL(with: DiscordPermissions(590980454018134))
             logger.info("Bot invite: \(botlink!)")
         }
         else {}
