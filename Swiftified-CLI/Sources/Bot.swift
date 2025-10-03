@@ -84,4 +84,17 @@ class Bot: @preconcurrency DiscordClientDelegate, @unchecked Sendable {
             logger.debug("Unhandled interaction type: \(interaction.type!)")
         }
     }
+    
+    @MainActor func client(_ client: DiscordClient, didDisconnectWithReason reason: DiscordGatewayCloseReason) {
+        // TODO: Actually help the error instead of exits directly
+        switch reason {
+        case .alreadyAuthenticated: logger.info("Already authenticated, doing nothing")
+        case .authenticationFailed, .notAuthenticated: logger.info("Auth failed, exiting"); exit(1)
+        case .decodeError: logger.info("Exiting: Bad packet"); exit(1)
+        case .disconnected, .normal, .goingAway, .noNetwork, .voiceServerCrash: logger.info("Exiting due to connection errors"); exit(1)
+        case .invalidSequence, .invalidShard, .sessionTimeout: logger.info("Exiting: the shard or session expired"); exit(1)
+        case .unknown, .unknownEncryptionMode, .unknownError, .unknownOpcode, .unknownOpcode, .unknownProtocol: logger.info("Got unknown error. Exiting"); exit(1)
+        default: logger.info("Exiting, unknown error"); exit(1)
+        }
+    }
 }
