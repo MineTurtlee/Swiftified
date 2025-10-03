@@ -55,14 +55,15 @@ jobs:
           echo "Final contents:"
           ls -R Swiftified-iOS
           ls -R Swiftified
+          echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
 
       - uses: actions/upload-artifact@v4
         with:
-          name: iOS
+          name: iOS-$BUILD_ID
           path: /Users/runner/Library/Developer/Xcode/DerivedData/Swiftified-dyauannpldjxcmfmuecmkcaymqda/Build/Products/Swiftified-iOS
       - uses: actions/upload-artifact@v4
         with:
-          name: macOS
+          name: macOS-$BUILD_ID
           path: /Users/runner/Library/Developer/Xcode/DerivedData/Swiftified-dyauannpldjxcmfmuecmkcaymqda/Build/Products/Swiftified
 
   linux:
@@ -88,9 +89,10 @@ jobs:
           cd x86_64-unknown-linux-gnu
           cd debug
           ls
+          echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v4
         with:
-          name: Linux
+          name: Linux-$BUILD_ID
           path: ${{ GITHUB.WORKSPACE }}/Swiftified-CLI/.build/x86_64-unknown-linux-gnu/debug/Swiftified
 
   maccli:
@@ -103,7 +105,8 @@ jobs:
         run: |
           cd ${{ GITHUB.WORKSPACE }}/Swiftified-CLI
           swift build --arch arm64 --arch x86_64
+          echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v4
         with:
-          name: macOS CLI (fat)
+          name: macOS CLI-$BUILD_ID
           path: ${{ GITHUB.WORKSPACE }}/Swiftified-CLI/.build/apple/Products/Debug/Swiftified
