@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package: Package = Package(
-    name: "Swiftified",
+    name: "Swiftified-CLI",
     dependencies: [
         .package(name: "Swiftified", path: "../Swiftified/")
     ],
@@ -12,9 +12,9 @@ let package: Package = Package(
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .executableTarget(
-            name: "Swiftified",
+            name: "Swiftified-CLI",
             dependencies: [
-                .product(name: "Discord", package: "swift-discord")
+                .product(name: "Swiftified", package: "Swiftified")
             ]
         ),
     ]
