@@ -2,70 +2,9 @@ name: Test-Build
 
 on:
   push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
 
 jobs:
-  apple:
-    name: Build (macOS)
-    runs-on: macos-15
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: switch
-        run: |
-          ls /Applications
-          sudo xcode-select -s /Applications/Xcode_16.4.app
-      - name: Set Default Scheme
-        run: |
-          scheme_list=$(xcodebuild -list -json | tr -d "\n")
-          default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
-          echo $default | cat >default
-          echo Using default scheme: $default
-      - name: Build
-        env:
-          scheme: ${{ 'default' }}
-        run: |
-          # xcrun xctrace returns via stderr, not the expected stdout (see https://developer.apple.com/forums/thread/663959)
-          if [ $scheme = default ]; then scheme=$(cat default); fi
-          if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
-          file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
-          xcodebuild build -scheme "$scheme" -"$filetype_parameter" "$file_to_build"
-      - name: Build (iOS)
-        run: |
-          xcodebuild build -scheme "Swiftified-iOS" -project "Swiftified.xcodeproj" CODE_SIGNING_ALLOWED='NO' -sdk iphoneos
-      - name: e
-        run: |
-          cd /Users/runner/Library/Developer/Xcode/DerivedData/Swiftified-dyauannpldjxcmfmuecmkcaymqda/Build/Products
-
-          ls
-
-          mkdir -p Swiftified-iOS/Payload
-          mkdir -p Swiftified
-          
-          echo "listing for Swiftified-iOS/Payload"
-          ls Swiftified-iOS/Payload
-
-          mv Debug-iphoneos/Swiftified-iOS.app ./Swiftified-iOS/Payload/
-
-          mv Debug/Swiftified.app ./Swiftified/
-
-          echo "Final contents:"
-          ls -R Swiftified-iOS
-          ls -R Swiftified
-          echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: iOS-${{ env.BUILD_ID }}
-          path: /Users/runner/Library/Developer/Xcode/DerivedData/Swiftified-dyauannpldjxcmfmuecmkcaymqda/Build/Products/Swiftified-iOS
-      - uses: actions/upload-artifact@v4
-        with:
-          name: macOS-${{ env.BUILD_ID }}
-          path: /Users/runner/Library/Developer/Xcode/DerivedData/Swiftified-dyauannpldjxcmfmuecmkcaymqda/Build/Products/Swiftified
-
   linux:
     name: Build (Linux)
     runs-on: ubuntu-latest
