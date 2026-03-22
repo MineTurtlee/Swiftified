@@ -10,7 +10,9 @@ struct Handlers {
             return
         }
 
-        // await command.messageHandler()
+        if command.messageHandler {
+            await command.messageHandler(message, args)
+        }
     }
     
     static func interactionHandler(interaction: DiscordInteraction) async {
@@ -21,6 +23,8 @@ struct Handlers {
             return
         }
         
-        await command.handler(interaction)
+        if command.handler {
+            await command.handler(interaction)
+        }
     }
 }

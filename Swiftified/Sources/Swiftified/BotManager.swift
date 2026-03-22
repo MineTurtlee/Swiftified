@@ -6,7 +6,7 @@ struct BotManager {
     private var bot: Bot
 
     init(token: String, tokenType: String) {
-        bot = Bot(token: String, tokenType: String)
+        bot = Bot(token: token, tokenType: tokenType, intents: .allIntents, commandPrefix: "sw[")
     }
 
     func start() {

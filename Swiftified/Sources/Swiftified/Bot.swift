@@ -1,4 +1,4 @@
-import Discord
+@preconcurrency import Discord
 
 class Bot: DiscordClientDelegate {
     public var client: DiscordClient!
@@ -64,7 +64,7 @@ class Bot: DiscordClientDelegate {
             case .disconnected:          reasonText = "Disconnected"
             case .voiceServerCrash:      reasonText = "Voice server crashed"
             case .unknownEncryptionMode: reasonText = "Unknown encryption mode"
-        default:                     reasonText = "Unrecognized reason (\(reason.rawValue))"
+            default:                     reasonText = "Unrecognized reason (\(reason.rawValue))"
         }
 
         print("Bot disconnected: \(reasonText) (code: \(reason.rawValue)) || Reconnecting...")
@@ -75,8 +75,12 @@ class Bot: DiscordClientDelegate {
         if message.content!.starts(with: prefix) {
             var messagee = message.content!
             messagee.trimPrefix(prefix)
+            var args = messagee.split(separator: " ").map(String.init)
+            args.removeFirst()
+            let msg = message       // 👈 copy this too
+            let pref = prefix
             Task {
-                await Handlers.messageHandler(prefix: self.prefix, content: messagee)
+                await Handlers.messageHandler(prefix: pref, message: msg, args: args)
             }
         }
     }
