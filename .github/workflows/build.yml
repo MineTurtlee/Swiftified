@@ -20,7 +20,7 @@ jobs:
         working-directory: Swiftified-CLI
         run: |
           swift --version
-          swift build -Xswiftc -static-stdlib
+          swift build
       - name: Debug
         working-directory: Swiftified-CLI
         run: |
