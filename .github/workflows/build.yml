@@ -44,10 +44,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install Swiftly & Swift 6.2.0
-        uses: vapor/swiftly-action@v0.2
-        with:
-          toolchain: 6.2.0
+      - name: Install Swift 6.2.0 (no Swiftly)
+        shell: bash
+        run: |
+          curl -L -O https://download.swift.org/swift-6.2-release/xcode/swift-6.2-RELEASE/swift-6.2-RELEASE-osx.pkg
+      
+          installer -target CurrentUserHomeDirectory -pkg swift-6.2-RELEASE-osx.pkg
+      
+          TOOLCHAIN_PATH="$HOME/Library/Developer/Toolchains/swift-6.2-RELEASE.xctoolchain"
+          TOOLCHAIN_ID=$(plutil -extract CFBundleIdentifier raw "$TOOLCHAIN_PATH/Info.plist")
+      
+          echo "TOOLCHAINS=$TOOLCHAIN_ID" >> "$GITHUB_ENV"
+          echo "$TOOLCHAIN_PATH/usr/bin" >> "$GITHUB_PATH"
       - name: Build
         run: |
           cd ${{ GITHUB.WORKSPACE }}/Swiftified-CLI
