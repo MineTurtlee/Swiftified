@@ -16,6 +16,10 @@ jobs:
       # - uses: beeauvin/swiftly-swift@v1
         # with:
           # swift-version: 6.1
+      - name: Install Swiftly & Swift 6.2.0
+        uses: vapor/swiftly-action@v0.2
+        with:
+          toolchain: 6.2.0
       - name: Build
         working-directory: Swiftified-CLI
         run: |
@@ -40,6 +44,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Install Swiftly & Swift 6.2.0
+        uses: vapor/swiftly-action@v0.2
+        with:
+          toolchain: 6.2.0
       - name: Build
         run: |
           cd ${{ GITHUB.WORKSPACE }}/Swiftified-CLI
