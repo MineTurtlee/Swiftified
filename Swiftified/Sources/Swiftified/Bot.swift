@@ -1,10 +1,13 @@
 @preconcurrency import Discord
+import Foundation
 
 class Bot: DiscordClientDelegate {
     public var client: DiscordClient!
     public var prefix: String
+    public var commands: Commands
 
     init(token: String, tokenType: String? = "Bot", intents: DiscordGatewayIntents, commandPrefix: String) {
+        commands = Commands()
         prefix = commandPrefix
         client = DiscordClient(
             token: "\(tokenType!) \(token)",
@@ -24,6 +27,10 @@ class Bot: DiscordClientDelegate {
     }
 
     func client(_ client: DiscordClient, didConnect connected: Bool) {
+        while !connected {
+            Thread.sleep(forTimeInterval: 0.01)
+        }
+
         let username = client.user?.username ?? "unknown"
         let userID = client.user?.id.description ?? "unknown"
         let guilds = client.guilds.count
@@ -41,6 +48,8 @@ class Bot: DiscordClientDelegate {
         for line: String in board {
             print(line)
         }
+
+        for command in commands
     }
 
     func client(_ client: DiscordClient, didDisconnectWithReason reason: DiscordGatewayCloseReason, closed: Bool) {
