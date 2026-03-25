@@ -33,7 +33,7 @@ extension Command {
 struct Commands {
     static var groups: [any CommandGroup.Type] {
         [
-            
+            Base.self
         ]
     }
 

@@ -12,6 +12,7 @@ struct Ping: Command {
     static let description = "Ping pong :)"
 
     static func handleSlash(_ client: DiscordClient, _ interaction: DiscordInteraction) async {
+        interaction.deferInteraction()
         var latencies = try! await ping()
         interaction.editInteraction(
             client: client,
@@ -38,6 +39,20 @@ struct Ping: Command {
     static func handleMessage(_ client: DiscordClient, _ message: DiscordMessage, _ args: [String]) async {
         var latencies = try! await ping()
 
-        
+        client.sendMessage(
+            DiscordMessage(
+                components: [
+                    DiscordMessageComponent.textDisplay(content: "# Ping statistics"),
+                    DiscordMessageComponent.separator(),
+                    DiscordMessageComponent.textDisplay(content: 
+                        """
+                        API latency: \(latencies[0])
+                        Websocket latency: \(latencies[1])
+                        """
+                    )
+                ]
+            ),
+            to: message.channelId
+        )
     }
 }

@@ -4,10 +4,8 @@ import Foundation
 class Bot: DiscordClientDelegate {
     public var client: DiscordClient!
     public var prefix: String
-    public var commands: Commands
 
     init(token: String, tokenType: String? = "Bot", intents: DiscordGatewayIntents, commandPrefix: String) {
-        commands = Commands()
         prefix = commandPrefix
         client = DiscordClient(
             token: "\(tokenType!) \(token)",
@@ -49,7 +47,9 @@ class Bot: DiscordClientDelegate {
             print(line)
         }
 
-        for command in commands
+        for command in Commands.list {
+            
+        }
     }
 
     func client(_ client: DiscordClient, didDisconnectWithReason reason: DiscordGatewayCloseReason, closed: Bool) {
