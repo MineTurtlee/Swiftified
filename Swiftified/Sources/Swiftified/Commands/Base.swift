@@ -11,7 +11,7 @@ struct Ping: Command {
     static let name = "ping"
     static let description = "Ping pong :)"
 
-    static func handleSlash(_ client: DiscordClient, interaction: DiscordInteraction) async {
+    static func handleSlash(_ client: DiscordClient, _ interaction: DiscordInteraction) async {
         var latencies = try! await ping()
         interaction.editInteraction(
             client: client,
@@ -35,7 +35,9 @@ struct Ping: Command {
         )
     }
     
-    static func handleMessage(_ message: DiscordMessage, _ args: [String]) async {
-        //
+    static func handleMessage(_ client: DiscordClient, _ message: DiscordMessage, _ args: [String]) async {
+        var latencies = try! await ping()
+
+        
     }
 }

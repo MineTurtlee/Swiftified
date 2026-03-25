@@ -1,8 +1,8 @@
 import Discord
 import Foundation
 
-typealias CommandHandler = (DiscordInteraction) async -> Void
-typealias MessageCommandHandler = (DiscordMessage, [String]) async -> Void
+typealias CommandHandler = (DiscordClient, DiscordInteraction) async -> Void
+typealias MessageCommandHandler = (DiscordClient, DiscordMessage, [String]) async -> Void
 
 struct Cmd {
     let name: String
@@ -14,8 +14,8 @@ struct Cmd {
 protocol Command {
     static var name: String { get }
     static var description: String { get }
-    static func handleSlash(_ interaction: DiscordInteraction) async
-    static func handleMessage(_ message: DiscordMessage, _ args: [String]) async
+    static func handleSlash(_ client: DiscordClient, _ interaction: DiscordInteraction) async
+    static func handleMessage(_ client: DiscordClient, _ message: DiscordMessage, _ args: [String]) async
 }
 
 // extension to auto-generate the Command struct so you never have to manually write it
@@ -24,8 +24,8 @@ extension Command {
         Cmd(
             name: name,
             description: description,
-            handler: { interaction in await handleSlash(interaction) },
-            messageHandler: { message, args in await handleMessage(message, args) }
+            handler: { client, interaction in await handleSlash(client, interaction) },
+            messageHandler: { client, message, args in await handleMessage(client, message, args) }
         )
     }
 }
