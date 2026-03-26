@@ -24,6 +24,30 @@ class Bot: DiscordClientDelegate {
         client.disconnect()
     }
 
+    func syncTree() {
+        let cmdlist = Commands.all
+
+        client.getApplicationCommands() { appcommands, response in
+            for command in appcommands {
+                let cmd = cmdlist[command.name]!
+                if command != nil {
+                    self.client.editApplicationCommand(command.id, name: cmd.name, description: cmd.description)
+                } else {
+                    self.client.deleteApplicationCommand(command.id)
+                }
+
+                /// wtf do i do here
+                for cmd in cmdlist {
+                    if command.name == cmd.value.name {
+                        return
+                    }
+                    self.client.createApplicationCommand(name: cmd.value.name, description: cmd.value.description)
+                }
+            }
+            return
+        }
+    }
+
     func client(_ client: DiscordClient, didConnect connected: Bool) {
         while !connected {
             Thread.sleep(forTimeInterval: 0.01)
@@ -45,10 +69,6 @@ class Bot: DiscordClientDelegate {
         let board: [String] = Formatter.boardify(padding: 2, lines: lines)
         for line: String in board {
             print(line)
-        }
-
-        for command in Commands.list {
-            
         }
     }
 
