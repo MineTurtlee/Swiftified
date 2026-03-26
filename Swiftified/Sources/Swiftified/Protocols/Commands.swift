@@ -32,9 +32,7 @@ extension Command {
 
 struct Commands {
     static var groups: [any CommandGroup.Type] {
-        [
-            Base.self
-        ]
+        []
     }
 
     static var all: [String: Cmd] {
