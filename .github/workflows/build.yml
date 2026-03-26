@@ -17,22 +17,22 @@ jobs:
         # with:
           # swift-version: 6.1
       - name: Build
-        working-directory: Swiftified-CLI
+        working-directory: Swiftified
         run: |
           swift --version
           swift build
-      - name: Debug
-        working-directory: Swiftified-CLI
-        run: |
-          cd .build
-          cd x86_64-unknown-linux-gnu
-          cd debug
-          ls
-          echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
-      - uses: actions/upload-artifact@v4
-        with:
-          name: Linux-${{ env.BUILD_ID }}
-          path: ${{ GITHUB.WORKSPACE }}/Swiftified-CLI/.build/x86_64-unknown-linux-gnu/debug/Swiftified
+      #- name: Debug
+      #  working-directory: Swiftified-CLI
+      #  run: |
+      #    cd .build
+      #    cd x86_64-unknown-linux-gnu
+      #    cd debug
+      #    ls
+      #    echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
+      #- uses: actions/upload-artifact@v4
+      #  with:
+      #    name: Linux-${{ env.BUILD_ID }}
+      #    path: ${{ GITHUB.WORKSPACE }}/Swiftified-CLI/.build/x86_64-unknown-linux-gnu/debug/Swiftified
 
   maccli:
     name: Build CLI (macOS)
@@ -54,10 +54,10 @@ jobs:
           echo "$TOOLCHAIN_PATH/usr/bin" >> "$GITHUB_PATH"
       - name: Build
         run: |
-          cd ${{ GITHUB.WORKSPACE }}/Swiftified-CLI
+          cd ${{ GITHUB.WORKSPACE }}/Swiftified
           swift build --arch arm64 --arch x86_64
-          echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
-      - uses: actions/upload-artifact@v4
-        with:
-          name: macOS CLI-${{ env.BUILD_ID }}
-          path: ${{ GITHUB.WORKSPACE }}/Swiftified-CLI/.build/apple/Products/Debug/Swiftified
+          #echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
+      #- uses: actions/upload-artifact@v4
+      #  with:
+      #    name: macOS CLI-${{ env.BUILD_ID }}
+      #    path: ${{ GITHUB.WORKSPACE }}/Swiftified-CLI/.build/apple/Products/Debug/Swiftified
